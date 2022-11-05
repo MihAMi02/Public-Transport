@@ -85,9 +85,9 @@ public class RegistrationSystem {
     }
 
 
-    public void removeProgram(Integer s)
+    public Program removeProgram(Integer s)
     {
-        this.programRepository.remove(s);
+        return this.programRepository.remove(s);
     }
 
     public void updateProgram(Program newProgram,Integer s)
@@ -95,10 +95,9 @@ public class RegistrationSystem {
         this.programRepository.update(newProgram,s);
     }
 
-    public void findProgram(Integer s)
+    public Program findProgram(Integer s)
     {
-        this.programRepository.find(s);
-
+        return this.programRepository.find(s);
     }
 
     //for stations
@@ -107,9 +106,9 @@ public class RegistrationSystem {
         this.stationRepository.add(station);
     }
 
-    public void removeStation(Integer s)
+    public Station removeStation(Integer s)
     {
-        this.stationRepository.remove(s);
+        return this.stationRepository.remove(s);
     }
 
     public void updateStation(Station newStation,Integer s)
@@ -117,9 +116,9 @@ public class RegistrationSystem {
         this.stationRepository.update(newStation,s);
     }
 
-    public void findStation(Integer s)
+    public Station findStation(Integer s)
     {
-        this.stationRepository.find(s);
+        return this.stationRepository.find(s);
     }
 
     //for ticketing sale points
@@ -142,14 +141,12 @@ public class RegistrationSystem {
     //for users
     public void addUser(User user)
     {
-
         this.userRepository.add(user);
     }
 
-    public void removeUser(String s)
+    public User removeUser(String s)
     {
-
-        this.userRepository.remove(s);
+        return this.userRepository.remove(s);
     }
 
     public void updateUser(User newUser,String s)
@@ -158,10 +155,9 @@ public class RegistrationSystem {
         this.userRepository.update(newUser,s);
     }
 
-    public void findUser(String s)
+    public User findUser(String s)
     {
-
-        this.userRepository.find(s);
+        return this.userRepository.find(s);
     }
 
     //for vehicles
@@ -170,9 +166,9 @@ public class RegistrationSystem {
         this.vehicleRepository.add(vehicle);
     }
 
-    public void removeVehicle(String s)
+    public Vehicle removeVehicle(String s)
     {
-        this.vehicleRepository.remove(s);
+        return this.vehicleRepository.remove(s);
     }
 
     public void setDepotRepository(DepotRepository depotRepository) {
@@ -210,14 +206,12 @@ public class RegistrationSystem {
 
     public void updateVehicle(Vehicle newVehicle, String s)
     {
-
         this.vehicleRepository.update(newVehicle,s);
     }
 
-    public void findVehicle(String s)
+    public Vehicle findVehicle(String s)
     {
-
-        this.vehicleRepository.find(s);
+        return this.vehicleRepository.find(s);
     }
 
 

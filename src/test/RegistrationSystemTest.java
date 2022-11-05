@@ -2,11 +2,12 @@ package test;
 
 import controller.RegistrationSystem;
 import model.data.*;
-import org.junit.Test;
+import org.testng.annotations.Test;
 import org.junit.jupiter.api.BeforeEach;
 import repository.interfaces.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -170,42 +171,103 @@ class RegistrationSystemTest {
     @org.junit.jupiter.api.Test
     void addLine() {
         Line line1 = new Line("320", "Bus", "", null);
-
         registrationSystem.addLine(line1);
-       assertNotNull(registrationSystem.findLine("320"));
+        assertNotNull(registrationSystem.findLine("320"));
 
 
     }
 
     @org.junit.jupiter.api.Test
     void removeLine() {
+        Line line2 = new Line("326", "Tram", "", null);
+        registrationSystem.addLine(line2);
+        Line result=registrationSystem.removeLine("326");
+        assertEquals(line2.getLineNumber(),result.getLineNumber());
+
+
+
     }
 
     @org.junit.jupiter.api.Test
     void updateLine() {
+        Line line3 = new Line("328", "Tram", "", null);
+        registrationSystem.updateLine(line3,"327");
+        Line result = registrationSystem.findLine("328");
+        assertEquals(line3.getLineNumber(), result.getLineNumber());
     }
 
     @org.junit.jupiter.api.Test
-    void findLine() {
+    void findLine(){
+        Line line2 = new Line("327", "Bus", "", null);
+        Line result=registrationSystem.findLine("327");
+        assertEquals(line2.getLineNumber(),result.getLineNumber());
     }
 
     @org.junit.jupiter.api.Test
     void addProgram() {
+        Vehicle bus = new DieselVehicle("WEB62809123456789", "Mercedes-Benz", "Citaro (O530.09)", 2008, 180, "Bus", 4);
 
+        Station station1 = new Station(1, "Scoala Gimnaziala nr. 141", "Str. Muntii Carpati, Nr. 8");
+        Station station2 = new Station(2, "Scoala Gimnaziala nr. 127", "Str. Muntii Carpati, Nr. 30");
+        List<Station> stationList1 = new ArrayList<>();
+        stationList1.add(station1);
+        stationList1.add(station2);
+        Line line1 = new Line("327", "Bus", "", stationList1);
 
+        Program program = new Program(2, bus, line1, "Evening", new Date());
 
+        registrationSystem.addProgram(program);
+
+        assertNotNull(registrationSystem.findProgram(1));
+        assertNotNull(registrationSystem.findProgram(2));
     }
 
     @org.junit.jupiter.api.Test
     void removeProgram() {
+        Program result = registrationSystem.removeProgram(1);
+        assertNull(registrationSystem.findProgram(1));
+        assertEquals(result.getLine().getLineNumber(), "327");
     }
 
     @org.junit.jupiter.api.Test
     void updateProgram() {
+        Vehicle bus = new DieselVehicle("WEB62809123456789", "Mercedes-Benz", "Citaro (O530.09)", 2008, 180, "Bus", 4);
+
+        Station station1 = new Station(1, "Scoala Gimnaziala nr. 141", "Str. Muntii Carpati, Nr. 8");
+        Station station2 = new Station(2, "Scoala Gimnaziala nr. 127", "Str. Muntii Carpati, Nr. 30");
+        List<Station> stationList1 = new ArrayList<>();
+        stationList1.add(station1);
+        stationList1.add(station2);
+        Line line1 = new Line("327", "Bus", "", stationList1);
+
+        Program program = new Program(1, bus, line1, "Evening", new Date());
+        registrationSystem.updateProgram(program, 1);
+        Program result = registrationSystem.findProgram(1);
+        assertEquals(result.getLine(), program.getLine());
+        assertEquals(result.getId(), program.getId());
+        assertEquals(result.getDate(), program.getDate());
+        assertEquals(result.getV(), program.getV());
+        assertEquals(result.getShift(), program.getShift());
+
     }
 
     @org.junit.jupiter.api.Test
     void findProgram() {
+        Vehicle bus = new DieselVehicle("WEB62809123456789", "Mercedes-Benz", "Citaro (O530.09)", 2008, 180, "Bus", 4);
+
+        Station station1 = new Station(1, "Scoala Gimnaziala nr. 141", "Str. Muntii Carpati, Nr. 8");
+        Station station2 = new Station(2, "Scoala Gimnaziala nr. 127", "Str. Muntii Carpati, Nr. 30");
+        List<Station> stationList1 = new ArrayList<>();
+        stationList1.add(station1);
+        stationList1.add(station2);
+        Line line1 = new Line("327", "Bus", "", stationList1);
+
+        Program program = new Program(1, bus, line1, "Morning", new Date());
+        Program result = registrationSystem.findProgram(1);
+        assertEquals(result.getLine().getLineNumber(), program.getLine().getLineNumber());
+        assertEquals(result.getId(), program.getId());
+        assertEquals(result.getV().getVin(), program.getV().getVin());
+        assertEquals(result.getShift(), program.getShift());
     }
 
     @org.junit.jupiter.api.Test
@@ -227,18 +289,44 @@ class RegistrationSystemTest {
 
     @org.junit.jupiter.api.Test
     void addTicketingSalePoint() {
+        TicketingSalePoint ticketingSalePoint1 = new TicketingSalePoint("TVM_GAR_NORD", "Ticketing Machine");
+        registrationSystem.addTicketingSalePoint(ticketingSalePoint1);
+        assertNotNull(registrationSystem.findTicketingSalePoint("TVM_GAR_NORD"));
+        assertNotNull(registrationSystem.findTicketingSalePoint("TVM_BUC_OBR"));
+        assertNotNull(registrationSystem.findTicketingSalePoint("DNA_GHICA"));
     }
 
     @org.junit.jupiter.api.Test
     void removeTicketingSalePoint() {
+        TicketingSalePoint ticketingSalePoint1 = new TicketingSalePoint("TVM_BUC_OBR", "Ticketing Machine");
+        TicketingSalePoint result = registrationSystem.removeTicketingSalePoint("TVM_BUC_OBR");
+        assertEquals(ticketingSalePoint1.getId(),result.getId());
+        assertEquals(ticketingSalePoint1.getType(),result.getType());
+        assertEquals(ticketingSalePoint1.getSoldTickets(),result.getSoldTickets());
+        assertNull(registrationSystem.findTicketingSalePoint("TVM_BUC_OBR"));
+        assertNotNull(registrationSystem.findTicketingSalePoint("DNA_GHICA"));
     }
 
     @org.junit.jupiter.api.Test
     void updateTicketingSalePoint() {
+        TicketingSalePoint temp = registrationSystem.findTicketingSalePoint("DNA_GHICA");
+        List<Ticket> tickets = new ArrayList<>();
+        tickets.add(new Ticket(3.0f, "Bilet", "1"));
+        temp.setSoldTickets(tickets);
+        registrationSystem.updateTicketingSalePoint(temp,"DNA_GHICA");
+        TicketingSalePoint result = registrationSystem.findTicketingSalePoint("DNA_GHICA");
+        assertEquals(temp.getId(),result.getId());
+        assertEquals(temp.getType(), result.getType());
+        assertEquals(temp.getSoldTickets(), result.getSoldTickets());
     }
 
     @org.junit.jupiter.api.Test
     void findTicketingSalePoint() {
+        TicketingSalePoint temp = new TicketingSalePoint("DNA_GHICA", "Ticketing Centre");
+        TicketingSalePoint result = registrationSystem.findTicketingSalePoint("DNA_GHICA");
+        assertEquals(temp.getId(),result.getId());
+        assertEquals(temp.getType(), result.getType());
+        assertEquals(temp.getSoldTickets(), result.getSoldTickets());
     }
 
     @org.junit.jupiter.api.Test
@@ -272,13 +360,21 @@ class RegistrationSystemTest {
 
     @org.junit.jupiter.api.Test
     void updateVehicle() {
+        Vehicle bus = new DieselVehicle("WEB62809123456789", "Mercedes-Benz", "Citaro (O530.09)", 2008, 180, "Bus", 4);
+        bus.setInMaintenance(true);
+        registrationSystem.updateVehicle(bus, "WEB62809123456789");
+        assertTrue(registrationSystem.findVehicle("WEB62809123456789").isInMaintenance());
     }
 
     @org.junit.jupiter.api.Test
     void findVehicle() {
+        Vehicle result = registrationSystem.findVehicle("WEB62809123456789");
+        assertNotNull(result);
     }
 
     @org.junit.jupiter.api.Test
     void login() {
+        User user1 = new User("ionel12", "parola");
+        registrationSystem.login(user1.getUsername(), user1.getPassword());
     }
 }
