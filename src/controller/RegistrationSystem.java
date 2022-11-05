@@ -3,7 +3,9 @@ package controller;
 import model.data.*;
 import repository.interfaces.*;
 
-public class RegistrationSystem {
+public class RegistrationSystem
+{
+
 
     DepotRepository depotRepository;
     EmployeeRepository employeeRepository;
@@ -35,48 +37,104 @@ public class RegistrationSystem {
         return this.depotRepository.remove(s);
     }
 
+    /**
+     *
+     * @param newDepot that is going to be added to the list
+     * @param s going to uodate the list of depots
+     */
+
     public void updateDepot(Depot newDepot, String s){
         this.depotRepository.update(newDepot, s);
     }
 
+
+    /**
+     * The function is going to find a depot looking for a string
+     * @param s is going to find a depot after looking about a certain String
+     * @return the depotRepository after finding it
+     */
     public Depot findDepot(String s){
         return this.depotRepository.find(s);
     }
+
+    /**
+     * It is going to add a new employee to the employeeRepository
+     * @param e that is going to be added to the employeeRepository
+     */
+
+
 
     //for employees
     public void addEmployee(Employee e){
         this.employeeRepository.add(e);
     }
 
+    /**
+     * Removes a user from the employeeRepos when looking for a given string
+     * @param s
+     * @return the remaining list of employeeRepos
+     */
     public Employee removeEmployee(String s){
         return this.employeeRepository.remove(s);
     }
 
+
+    /**
+     *The function is going to update the employeeRepos
+     * @param newEmployee that is going to be updated
+     * @param s is going to be returned
+     */
     public void updateEmployee(Employee newEmployee, String s){
         this.employeeRepository.update(newEmployee, s);
     }
 
+
+    /**
+     * Finding an employee just looking for a string
+     * @param s is the parameter used for finding the employee
+     * @return return in the final the employeeRepository
+     */
     public Employee findEmployee(String s){
         return this.employeeRepository.find(s);
     }
 
-
+    /**
+     * Is going to add a new line to the lineRepo
+     * @param line is going to be added to the lineRepository
+     */
     //for lines
     public void addLine(Line line){
         this.lineRepository.add(line);
     }
 
+    /**
+     *The function is going to remove a line from lineRepo when looking about a string
+     * @param s
+     * @return the remaining lineRepo
+     */
     public Line removeLine(String s){
        return this.lineRepository.remove(s);
     }
 
+
+    /**
+     * The function is going to update the lineRepos
+     * @param newLine that is going to be updated
+     * @param s the newest version of  lineRepos
+     */
     public void updateLine(Line newLine, String s){
         this.lineRepository.update(newLine, s);
     }
 
-    public Line findLine(String s){
-        return this.lineRepository.find(s);
-    }
+
+    /**
+     * Finding a line after looking for a certain string
+     * @param s after looking
+     * @return the lineRepos
+     */
+     public Line findLine(String s){
+     return this.lineRepository.find(s);
+     }
 
     //for programs
     public void addProgram(Program program)
