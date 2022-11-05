@@ -5,6 +5,7 @@ import java.util.List;
 
 public class Line {
 
+
     private String lineNumber;
 
     private String type;
