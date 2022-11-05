@@ -272,19 +272,41 @@ class RegistrationSystemTest {
 
     @org.junit.jupiter.api.Test
     void addStation() {
+        Station station1 = new Station(1, "Scoala Gimnaziala nr. 141", "Str. Muntii Carpati, Nr. 8");
+        registrationSystem.addStation(station1);
+        assertNotNull(station1.getStationId());
+
 
     }
 
     @org.junit.jupiter.api.Test
     void removeStation() {
+        Station station1 = new Station(1, "Scoala Gimnaziala nr. 141", "Str. Muntii Carpati, Nr. 8");
+        Station station2 = new Station(2, "Scoala Gimnaziala nr. 127", "Str. Muntii Carpati, Nr. 30");
+
+        registrationSystem.addStation(station2);
+
+        Station result=registrationSystem.removeStation(2);
+
+        assertEquals(result.getStationId(),station2.getStationId());
+        assertNull(registrationSystem.findStation(2));
+
+
     }
 
     @org.junit.jupiter.api.Test
     void updateStation() {
+        Station station3 = new Station(3, "Scoala Gimnaziala nr. 128", "Str. Muntii Calimani, Nr. 31");
+        registrationSystem.updateStation(station3,2);
+        Station result = registrationSystem.findStation(3);
+        assertEquals(result.getStationId(), station3.getStationId());
     }
 
     @org.junit.jupiter.api.Test
     void findStation() {
+        Station station3 = new Station(2, "Scoala Gimnaziala nr. 127", "Str. Muntii Calimani, Nr. 31");
+        Station result = registrationSystem.findStation(2);
+        assertEquals(result.getStationId(),station3.getStationId());
     }
 
     @org.junit.jupiter.api.Test
@@ -331,31 +353,64 @@ class RegistrationSystemTest {
 
     @org.junit.jupiter.api.Test
     void addUser() {
-
-
-
+        User user1 = new User("ionel12", "parola");
+        registrationSystem.addUser(user1);
+        assertNotNull(user1.getUsername());
 
     }
 
     @org.junit.jupiter.api.Test
     void removeUser() {
+        User user1 = new User("ionel12", "parola");
+        User user2 = new User("geani_dabu", "1");
+        registrationSystem.addUser(user2);
+        User result=registrationSystem.removeUser("geani_dabu");
+
+        assertEquals(result.getUsername(),user2.getUsername());
+        assertNull(registrationSystem.findUser("geani_dabu"));
+
     }
 
     @org.junit.jupiter.api.Test
     void updateUser() {
+
+
+        User user3 = new User("geani_dabu_clona", "2");
+        registrationSystem.addUser(user3);
+
+        registrationSystem.updateUser(user3,"geani_dabu_clona");
+        User result=registrationSystem.findUser("geani_dabu_clona");
+        assertEquals(result.getUsername(),user3.getUsername());
+
     }
 
     @org.junit.jupiter.api.Test
     void findUser() {
+        User user3 = new User("geani_dabu_clona", "2");
+        registrationSystem.addUser(user3);
+        User result=registrationSystem.findUser("geani_dabu_clona");
+        assertEquals(user3.getUsername(),result.getUsername());
+
+
     }
 
     @org.junit.jupiter.api.Test
     void addVehicle() {
+        Vehicle bus = new DieselVehicle("WEB62809123456790", "Mercedes-Benz", "Citaro (O530.09)", 2008, 180, "Bus", 4);
+        registrationSystem.addVehicle(bus);
+        assertNotNull(registrationSystem.findVehicle(bus.getVin()));
 
     }
 
     @org.junit.jupiter.api.Test
     void removeVehicle() {
+        Vehicle bus = new DieselVehicle("WEB62809123456789", "Mercedes-Benz", "Citaro (O530.09)", 2008, 180, "Bus", 4);
+        Vehicle tram = new ElectricVehicle("3344", "CKD Tatra", "T4R", 1977, 100, "Tram", 65);
+        registrationSystem.addVehicle(tram);
+        Vehicle result=registrationSystem.removeVehicle(tram.getVin());
+        assertEquals(result.getVin(),tram.getVin());
+        assertNull(registrationSystem.findVehicle(tram.getVin()));
+        assertNotNull(registrationSystem.findVehicle(bus.getVin()));
     }
 
     @org.junit.jupiter.api.Test
@@ -378,3 +433,4 @@ class RegistrationSystemTest {
         registrationSystem.login(user1.getUsername(), user1.getPassword());
     }
 }
+
