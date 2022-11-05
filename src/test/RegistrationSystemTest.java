@@ -2,7 +2,7 @@ package test;
 
 import controller.RegistrationSystem;
 import model.data.*;
-import org.testng.annotations.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import repository.interfaces.*;
 

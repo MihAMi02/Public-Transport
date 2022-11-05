@@ -17,4 +17,11 @@ public class View {
             single_instance = new View();
         return  single_instance;
     }
+
+    public void menu(){
+        while(true){
+            System.out.println("Public Transport Management Software v0.2");
+            break;
+        }
+    }
 }
