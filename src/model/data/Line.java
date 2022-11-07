@@ -7,15 +7,9 @@ public class Line {
 
 
     private String lineNumber;
-
     private String type;
-
     private String specialRequirement;
-
     private List<Ticket> usedTickets;
-
-
-
     private List<Station> stationsList;
 
     public Line(String lineNumber, String type, String specialRequirement, List<Station> stationsList) {

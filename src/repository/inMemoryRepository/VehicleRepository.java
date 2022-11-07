@@ -1,5 +1,6 @@
 package repository.inMemoryRepository;
 
+import model.comparators.VehicleParkNumberComparators;
 import model.data.DieselVehicle;
 import model.data.ElectricVehicle;
 import model.data.Vehicle;
@@ -74,5 +75,43 @@ public class VehicleRepository implements repository.interfaces.VehicleRepositor
             }
         }
         return vehicles;
+    }
+
+    @Override
+    public List<Vehicle> sortByParkNumber(boolean ascending)
+    {
+        if(ascending){
+            vehicleList.sort(new VehicleParkNumberComparators());
+        }
+        else{
+            vehicleList.sort(new VehicleParkNumberComparators().reversed());
+        }
+        return vehicleList;
+    }
+
+    @Override
+    public List<Vehicle> sortByYear(boolean ascending) {
+        if(ascending)
+        {
+            vehicleList.sort(new VehicleParkNumberComparators());
+        }
+        else
+        {
+            vehicleList.sort(new VehicleParkNumberComparators().reversed());
+        }
+        return vehicleList;
+    }
+
+    @Override
+    public List<Vehicle> filterByinMainetenanceStatus(boolean inMaintenance) {
+        List<Vehicle> resultList=new ArrayList<>();
+        for(Vehicle v:this.vehicleList)
+        {
+            if(v.isInMaintenance()==inMaintenance)
+            {
+                resultList.add(v);
+            }
+        }
+        return resultList;
     }
 }

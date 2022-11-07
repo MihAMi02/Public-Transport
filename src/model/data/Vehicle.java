@@ -89,5 +89,3 @@ public abstract class Vehicle {
         this.inMaintenance = inMaintenance;
     }
 }
-
-

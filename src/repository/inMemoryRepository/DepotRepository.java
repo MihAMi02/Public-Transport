@@ -74,4 +74,9 @@ public class DepotRepository implements repository.interfaces.DepotRepository {
         }
         return null;
     }
+
+    @Override
+    public List<Depot> sortByName(boolean ascending) {
+        return null;
+    }
 }

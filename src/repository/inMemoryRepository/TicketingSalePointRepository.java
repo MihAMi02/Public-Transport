@@ -4,6 +4,7 @@ import model.data.TicketingSalePoint;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class TicketingSalePointRepository implements repository.interfaces.TicketingSalePointRepository {
 
@@ -61,5 +62,16 @@ public class TicketingSalePointRepository implements repository.interfaces.Ticke
             }
         }
         return null;
+    }
+
+    @Override
+    public List<TicketingSalePoint> filterByType(String type) {
+        List<TicketingSalePoint> ticketingSalePoints = new ArrayList<>();
+        for(TicketingSalePoint point: this.ticketingSalePoints){
+            if(point.getType().equals(type)){
+                ticketingSalePoints.add(point);
+            }
+        }
+        return ticketingSalePoints;
     }
 }

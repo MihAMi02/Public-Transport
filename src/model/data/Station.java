@@ -4,22 +4,24 @@ import java.util.List;
 
 public class Station
 {
-
     private int stationId;
-
     private String name;
-
     private String address;
-
-
     private List<Line> linesCalling;
-
 
     public Station(int stationId, String name, String address)
     {
         this.stationId = stationId;
         this.name = name;
         this.address = address;
+    }
+
+    public List<Line> getLinesCalling() {
+        return linesCalling;
+    }
+
+    public void setLinesCalling(List<Line> linesCalling) {
+        this.linesCalling = linesCalling;
     }
 
     public int getStationId() {

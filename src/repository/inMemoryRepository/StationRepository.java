@@ -62,4 +62,17 @@ public class StationRepository implements repository.interfaces.StationRepositor
         }
         return null;
     }
+
+    @Override
+    public List<Station> sortByName(boolean ascending) {
+        if(ascending)
+        {
+            stationList.sort(new StationNameComparator());
+        }
+        else
+        {
+            stationList.sort(new StationNameComparator().reversed());
+        }
+        return stationList;
+    }
 }

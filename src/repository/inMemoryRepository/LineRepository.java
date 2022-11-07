@@ -66,4 +66,19 @@ public class LineRepository implements repository.interfaces.LineRepository {
         }
         return null;
     }
+
+    @Override
+    public List<Line> filterByType(String type) {
+        return null;
+    }
+
+    @Override
+    public List<Line> sortByLineNumber(boolean ascending) {
+        return null;
+    }
+
+    @Override
+    public List<Line> sortNumberUsedTickets(boolean ascending) {
+        return null;
+    }
 }

@@ -69,4 +69,14 @@ public class ProgramRepository implements repository.interfaces.ProgramRepositor
         }
         return null;
     }
+
+    @Override
+    public List<Program> filterByVehicle(String vin) {
+        return null;
+    }
+
+    @Override
+    public List<Program> sortByLine(boolean ascending) {
+        return null;
+    }
 }

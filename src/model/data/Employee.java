@@ -3,15 +3,10 @@ package model.data;
 public class Employee {
 
     private int id;
-
     private String cnp;
-
     private String fullname;
-
     private String role;
-
     private String workplace;
-
     private int salary;
 
     public Employee(int id, String cnp, String fullname, String role, String workplace, int salary) {

@@ -62,4 +62,24 @@ public class EmployeeRepository implements repository.interfaces.EmployeeReposit
         }
         return null;
     }
+
+    @Override
+    public List<Employee> filterByRole(String role) {
+        return null;
+    }
+
+    @Override
+    public List<Employee> filterByWorkplace(String workplace) {
+        return null;
+    }
+
+    @Override
+    public List<Employee> sortBySalary(boolean ascending) {
+        return null;
+    }
+
+    @Override
+    public List<Employee> sortByName(boolean ascending) {
+        return null;
+    }
 }
