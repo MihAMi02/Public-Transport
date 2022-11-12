@@ -333,7 +333,7 @@ class RegistrationSystemTest {
     void updateTicketingSalePoint() {
         TicketingSalePoint temp = registrationSystem.findTicketingSalePoint("DNA_GHICA");
         List<Ticket> tickets = new ArrayList<>();
-        tickets.add(new Ticket(3.0f, "Bilet", "1"));
+        tickets.add(new Ticket(3.0f, "Bilet", 1));
         temp.setSoldTickets(tickets);
         registrationSystem.updateTicketingSalePoint(temp,"DNA_GHICA");
         TicketingSalePoint result = registrationSystem.findTicketingSalePoint("DNA_GHICA");

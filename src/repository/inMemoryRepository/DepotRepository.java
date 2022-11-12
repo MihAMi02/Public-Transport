@@ -1,5 +1,6 @@
 package repository.inMemoryRepository;
 
+import model.comparators.DepotNameComparator;
 import model.data.Depot;
 import model.data.DieselVehicle;
 import model.data.ElectricVehicle;
@@ -33,7 +34,7 @@ public class DepotRepository implements repository.interfaces.DepotRepository {
 
 
     @Override
-    public void add(Depot entity) {
+    public boolean add(Depot entity) {
         boolean found = false;
         for(Depot depot : this.depotList){
             if(depot.getName().equals(entity.getName())){
@@ -43,7 +44,9 @@ public class DepotRepository implements repository.interfaces.DepotRepository {
         }
         if(!found) {
             this.depotList.add(entity);
+            return true;
         }
+        return false;
     }
 
     @Override
@@ -77,6 +80,17 @@ public class DepotRepository implements repository.interfaces.DepotRepository {
 
     @Override
     public List<Depot> sortByName(boolean ascending) {
-        return null;
+        if(ascending){
+            this.depotList.sort(new DepotNameComparator());
+        } else {
+            this.depotList.sort(new DepotNameComparator().reversed());
+        }
+        return this.depotList;
+    }
+
+    @Override
+    public void moveVehicle(String fromDepot, String toDepot, String vin) {
+        Vehicle temp = this.find(fromDepot).removeVehicle(vin);
+        this.find(toDepot).addVehicle(temp);
     }
 }

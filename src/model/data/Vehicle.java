@@ -88,4 +88,6 @@ public abstract class Vehicle {
     public void setInMaintenance(boolean inMaintenance) {
         this.inMaintenance = inMaintenance;
     }
+
+
 }

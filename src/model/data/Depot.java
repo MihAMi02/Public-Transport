@@ -48,12 +48,26 @@ public class Depot {
     }
 
     /**
-     * removes a given Vehicle from a Depot
-     * @param v Vehicle to be removed from a depot
+     * removes vehicle with given string from depot
+     * @param vin vin of vehicle
+     * @return removed vehicle
      */
-    public void removeVehicle(Vehicle v)
+    public Vehicle removeVehicle(String vin)
     {
-        vehicles.remove(v);
+        Vehicle temp = this.findVehicle(vin);
+        if(temp != null){
+            this.vehicles.remove(temp);
+        }
+        return temp;
+    }
+
+    private Vehicle findVehicle(String vin){
+        for(Vehicle vehicle : vehicles){
+            if(vehicle.getVin().equals(vin)){
+                return vehicle;
+            }
+        }
+        return null;
     }
 
 }

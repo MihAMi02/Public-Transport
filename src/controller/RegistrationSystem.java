@@ -3,6 +3,8 @@ package controller;
 import model.data.*;
 import repository.interfaces.*;
 
+import java.util.List;
+
 public class RegistrationSystem
 {
 
@@ -15,6 +17,16 @@ public class RegistrationSystem
     TicketingSalePointRepository ticketingSalePointRepository;
     UserRepository userRepository;
     VehicleRepository vehicleRepository;
+    TicketTypeRepository ticketTypeRepository;
+    TicketRepository ticketRepository;
+
+    public void setTicketRepository(TicketRepository ticketRepository) {
+        this.ticketRepository = ticketRepository;
+    }
+
+    public void setTicketTypeRepository(TicketTypeRepository ticketTypeRepository) {
+        this.ticketTypeRepository = ticketTypeRepository;
+    }
 
     private static RegistrationSystem single_instance = null;
 
@@ -38,8 +50,8 @@ public class RegistrationSystem
      * Adds a given depot to the given instance
      * @param depot new depot to be added
      */
-    public void addDepot(Depot depot){
-        this.depotRepository.add(depot);
+    public boolean addDepot(Depot depot){
+        return this.depotRepository.add(depot);
     }
 
     /**
@@ -79,8 +91,8 @@ public class RegistrationSystem
 
 
     //for employees
-    public void addEmployee(Employee e){
-        this.employeeRepository.add(e);
+    public boolean addEmployee(Employee e){
+        return this.employeeRepository.add(e);
     }
 
     /**
@@ -117,8 +129,8 @@ public class RegistrationSystem
      * @param line is going to be added to the lineRepository
      */
     //for lines
-    public void addLine(Line line){
-        this.lineRepository.add(line);
+    public boolean addLine(Line line){
+        return this.lineRepository.add(line);
     }
 
     /**
@@ -155,9 +167,9 @@ public class RegistrationSystem
      * Adds given Program to the repository
      * @param program new Program to be added
      */
-     public void addProgram(Program program)
+     public boolean addProgram(Program program)
      {
-     this.programRepository.add(program);
+        return this.programRepository.add(program);
      }
 
      /**
@@ -195,9 +207,9 @@ public class RegistrationSystem
      * Adds given Station to the repository
      * @param station new Station to be added
      */
-    public void addStation(Station station)
+    public boolean addStation(Station station)
     {
-        this.stationRepository.add(station);
+        return this.stationRepository.add(station);
     }
 
     /**
@@ -236,8 +248,8 @@ public class RegistrationSystem
      * Adds given TicketingSalePoint to the repository
      * @param ticketingSalePoint new TSP to be added
      */
-    public void addTicketingSalePoint(TicketingSalePoint ticketingSalePoint){
-        this.ticketingSalePointRepository.add(ticketingSalePoint);
+    public boolean addTicketingSalePoint(TicketingSalePoint ticketingSalePoint){
+        return this.ticketingSalePointRepository.add(ticketingSalePoint);
     }
 
     /**
@@ -272,9 +284,9 @@ public class RegistrationSystem
      * Adds given user
      * @param user User to be added
      */
-    public void addUser(User user)
+    public boolean addUser(User user)
     {
-        this.userRepository.add(user);
+        return this.userRepository.add(user);
     }
 
     /**
@@ -308,15 +320,24 @@ public class RegistrationSystem
         return this.userRepository.find(s);
     }
 
+    /**
+     * Returns tickets of user
+     * @param s username of user
+     * @return list of tickets user has
+     */
+    public List<Ticket> getUserFares(String s){
+        return this.userRepository.getUserFares(s);
+    }
+
     //for vehicles
 
     /**
      * Adds a new Vehicle to the repository
      * @param vehicle new Vehicle Object to be added
      */
-    public void addVehicle(Vehicle vehicle)
+    public boolean addVehicle(Vehicle vehicle)
     {
-        this.vehicleRepository.add(vehicle);
+        return this.vehicleRepository.add(vehicle);
     }
 
     /**
@@ -426,11 +447,45 @@ public class RegistrationSystem
      * @param username given username
      * @param password given password
      */
-    public void login(String username, String password){
+    public UserType login(String username, String password){
         User user = userRepository.findByUsernameAndPassword(username, password);
         if(user==null){
             System.out.println("You do not have an account!");
+            return null;
         }
+        return user.getUserType();
+    }
+
+    public List<TicketType> getTicketTypes(){
+        return this.ticketTypeRepository.getAllTypes();
+    }
+
+    public Integer getNextTicketID(){
+        return this.ticketRepository.getNextId();
+    }
+
+    public void addTicketToUser(String username, Ticket ticket){
+        this.userRepository.addFare(username,ticket);
+    }
+
+    public boolean addTicket(Ticket ticket){
+        return this.ticketRepository.add(ticket);
+    }
+
+    public List<Vehicle> findByParkNumber(String parkNum){
+        return this.vehicleRepository.findVehicleByParkNumber(parkNum);
+    }
+
+    public List<Vehicle> filterInMaintenance(boolean status){
+        return this.vehicleRepository.filterByinMainetenanceStatus(status);
+    }
+
+    public List<Vehicle> sortVehByYear(boolean dir){
+        return this.vehicleRepository.sortByYear(dir);
+    }
+
+    public List<Vehicle> sortVehByParkNumber(boolean dir){
+        return this.vehicleRepository.sortByParkNumber(dir);
     }
 }
 

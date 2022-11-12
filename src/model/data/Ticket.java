@@ -3,9 +3,9 @@ package model.data;
 public class Ticket {
     private double value;
     private String type;
-    private String id;
+    private int id;
 
-    public Ticket(double value, String type, String id) {
+    public Ticket(double value, String type, int id) {
         this.value = value;
         this.type = type;
         this.id = id;
@@ -27,11 +27,11 @@ public class Ticket {
         this.type = type;
     }
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

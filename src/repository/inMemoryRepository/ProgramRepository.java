@@ -29,7 +29,7 @@ public class ProgramRepository implements repository.interfaces.ProgramRepositor
     }
 
     @Override
-    public void add(Program entity) {
+    public boolean add(Program entity) {
         boolean found = false;
         for(Program program : this.programList){
             if(program.getId() == entity.getId()){
@@ -39,7 +39,9 @@ public class ProgramRepository implements repository.interfaces.ProgramRepositor
         }
         if(!found){
             this.programList.add(entity);
+            return true;
         }
+        return false;
     }
 
     @Override

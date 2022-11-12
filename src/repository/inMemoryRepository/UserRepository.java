@@ -1,5 +1,6 @@
 package repository.inMemoryRepository;
 
+import model.data.Ticket;
 import model.data.User;
 import model.data.UserType;
 
@@ -20,13 +21,20 @@ public class UserRepository implements repository.interfaces.UserRepository {
     private void populate(){
         User user1 = new User("ionel12", "parola");
         User user2 = new User("geani_dabu", "1");
+        User user3 = new User("gica_de_la_scularie", "nea");
+        User user4 = new User("madam-salam", "troleibuzul");
+        user1.addFare(new Ticket(3.0f, "Bilet", 1));
         user2.setUserType(UserType.DIRECTOR);
+        user3.setUserType(UserType.MAINTENANCE);
+        user4.setUserType(UserType.DISPATCHER);
         this.userList.add(user1);
         this.userList.add(user2);
+        this.userList.add(user3);
+        this.userList.add(user4);
     }
 
     @Override
-    public void add(User entity) {
+    public boolean add(User entity) {
         boolean found = false;
         for(User user : this.userList){
             if(user.getUsername().equals(entity.getUsername())){
@@ -36,7 +44,9 @@ public class UserRepository implements repository.interfaces.UserRepository {
         }
         if(!found){
             this.userList.add(entity);
+            return true;
         }
+        return false;
     }
 
     @Override
@@ -74,6 +84,18 @@ public class UserRepository implements repository.interfaces.UserRepository {
         }
         return null;
     }
+
+    @Override
+    public List<Ticket> getUserFares(String username) {
+        return this.find(username).getTickets();
+    }
+
+    @Override
+    public void addFare(String username, Ticket ticket) {
+        this.find(username).addFare(ticket);
+    }
+
+
 }
 
 

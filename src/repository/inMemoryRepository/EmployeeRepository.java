@@ -22,7 +22,7 @@ public class EmployeeRepository implements repository.interfaces.EmployeeReposit
     }
 
     @Override
-    public void add(Employee entity) {
+    public boolean add(Employee entity) {
         boolean found = false;
         for(Employee employee : employeeList){
             if(employee.getCnp() == entity.getCnp()){
@@ -32,7 +32,9 @@ public class EmployeeRepository implements repository.interfaces.EmployeeReposit
         }
         if(!found){
             this.employeeList.add(entity);
+            return true;
         }
+        return false;
     }
 
     @Override

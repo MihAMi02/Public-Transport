@@ -25,6 +25,21 @@ public class DieselVehicle extends Vehicle
     public void setEuronorm(int euronorm) {
         this.euronorm = euronorm;
     }
+    @Override
+    public String toString() {
+        return "Vehicle{" +
+                "vin='" + super.getVin() + '\'' +
+                ", parkNumber='" + super.getParkNumber() + '\'' +
+                ", make='" + super.getMake() + '\'' +
+                ", model='" + super.getModel() + '\'' +
+                ", built=" + super.getBuilt() +
+                ", capacity=" + super.getCapacity() +
+                ", driverID=" + super.getDriverID() +
+                ", inMaintenance=" + super.isInMaintenance() +
+                ", type=" + type +
+                ", euronorm=" + euronorm +
+                "}";
+    }
 }
 
 

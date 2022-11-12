@@ -23,7 +23,7 @@ public class StationRepository implements repository.interfaces.StationRepositor
     }
 
     @Override
-    public void add(Station entity) {
+    public boolean add(Station entity) {
         boolean found = false;
         for(Station station : this.stationList){
             if(station.getStationId() == entity.getStationId()){
@@ -33,7 +33,9 @@ public class StationRepository implements repository.interfaces.StationRepositor
         }
         if(!found){
             this.stationList.add(entity);
+            return true;
         }
+        return false;
     }
 
     @Override

@@ -26,7 +26,7 @@ public class LineRepository implements repository.interfaces.LineRepository {
     }
 
     @Override
-    public void add(Line entity) {
+    public boolean add(Line entity) {
         boolean found = false;
         for(Line line : this.lineList){
             if(line.getLineNumber().equals(entity.getLineNumber())){
@@ -36,7 +36,9 @@ public class LineRepository implements repository.interfaces.LineRepository {
         }
         if(!found){
             this.lineList.add(entity);
+            return true;
         }
+        return false;
     }
 
     @Override

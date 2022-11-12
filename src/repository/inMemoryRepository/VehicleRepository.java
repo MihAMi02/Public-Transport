@@ -19,13 +19,19 @@ public class VehicleRepository implements repository.interfaces.VehicleRepositor
 
     private void populate(){
         Vehicle bus = new DieselVehicle("WEB62809123456789", "Mercedes-Benz", "Citaro (O530.09)", 2008, 180, "Bus", 4);
+        Vehicle bus2 = new DieselVehicle("WEB62809123456700", "Mercedes-Benz", "Citaro (O530.09)", 2008, 180, "Bus", 4);
         Vehicle tram = new ElectricVehicle("3344", "CKD Tatra", "T4R", 1977, 100, "Tram", 65);
+        bus.setParkNumber("4681");
+        bus2.setParkNumber("4661");
+        tram.setParkNumber("3344");
+        bus.setInMaintenance(true);
         this.vehicleList.add(bus);
+        this.vehicleList.add(bus2);
         this.vehicleList.add(tram);
     }
 
     @Override
-    public void add(Vehicle entity) {
+    public boolean add(Vehicle entity) {
         boolean found = false;
         for(Vehicle vehicle : vehicleList){
             if(vehicle.getVin().equals(entity.getVin())){
@@ -35,7 +41,9 @@ public class VehicleRepository implements repository.interfaces.VehicleRepositor
         }
         if(!found){
             this.vehicleList.add(entity);
+            return true;
         }
+        return false;
     }
 
     @Override

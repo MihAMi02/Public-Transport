@@ -23,7 +23,7 @@ public class TicketingSalePointRepository implements repository.interfaces.Ticke
     }
 
     @Override
-    public void add(TicketingSalePoint entity) {
+    public boolean add(TicketingSalePoint entity) {
         boolean found = false;
         for(TicketingSalePoint ticketingSalePoint : this.ticketingSalePoints){
             if(ticketingSalePoint.getId().equals(entity.getId())){
@@ -33,7 +33,9 @@ public class TicketingSalePointRepository implements repository.interfaces.Ticke
         }
         if(!found){
             this.ticketingSalePoints.add(entity);
+            return true;
         }
+        return false;
     }
 
     @Override

@@ -61,5 +61,9 @@ public class User {
     public void setRegistrationSystem(RegistrationSystem registrationSystem) {
         this.registrationSystem = registrationSystem;
     }
+
+    public void addFare(Ticket ticket){
+        this.tickets.add(ticket);
+    }
 }
 
