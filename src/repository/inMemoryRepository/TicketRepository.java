@@ -64,6 +64,10 @@ public class TicketRepository implements repository.interfaces.TicketRepository 
 
     @Override
     public Integer getNextId() {
-        return this.tickets.size();
+        int nextId = 0;
+        for(Ticket ticket: tickets){
+            nextId = ticket.getId();
+        }
+        return nextId + 1;
     }
 }

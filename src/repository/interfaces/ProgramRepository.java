@@ -9,6 +9,6 @@ public interface ProgramRepository extends CrudRepository<Integer, Program>{
 
     List<Program> sortByLine(boolean ascending);
 
-
+    Integer getNextProgramID();
 
 }

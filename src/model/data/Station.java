@@ -1,5 +1,6 @@
 package model.data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Station
@@ -7,20 +8,31 @@ public class Station
     private int stationId;
     private String name;
     private String address;
-    private List<Line> linesCalling;
+    private List<String> linesCalling;
 
     public Station(int stationId, String name, String address)
     {
         this.stationId = stationId;
         this.name = name;
         this.address = address;
+        this.linesCalling = new ArrayList<>();
     }
 
-    public List<Line> getLinesCalling() {
+    @Override
+    public String toString() {
+        return "Station{" +
+                "stationId=" + stationId +
+                ", name='" + name + '\'' +
+                ", address='" + address + '\'' +
+                ", linesCalling=" + linesCalling +
+                '}';
+    }
+
+    public List<String> getLinesCalling() {
         return linesCalling;
     }
 
-    public void setLinesCalling(List<Line> linesCalling) {
+    public void setLinesCalling(List<String> linesCalling) {
         this.linesCalling = linesCalling;
     }
 
@@ -48,14 +60,11 @@ public class Station
         this.address = address;
     }
 
-    @Override
-    public String toString() {
-        return "Station{" +
-                "stationId=" + stationId +
-                ", name='" + name + '\'' +
-                ", address='" + address + '\'' +
-                '}';
+    public void addLine(String line){
+        this.linesCalling.add(line);
     }
 
-
+    public void delLine(String line){
+        this.linesCalling.remove(line);
+    }
 }

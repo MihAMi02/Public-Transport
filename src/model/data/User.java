@@ -2,6 +2,7 @@ package model.data;
 
 import controller.RegistrationSystem;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,6 +65,10 @@ public class User {
 
     public void addFare(Ticket ticket){
         this.tickets.add(ticket);
+    }
+
+    public void removeFare(Ticket ticket){
+        this.tickets.remove(ticket);
     }
 }
 

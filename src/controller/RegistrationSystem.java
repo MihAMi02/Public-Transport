@@ -468,6 +468,10 @@ public class RegistrationSystem
         this.userRepository.addFare(username,ticket);
     }
 
+    public void delTicketFromUser(String username, Ticket ticket){
+        this.userRepository.delFare(username,ticket);
+    }
+
     public boolean addTicket(Ticket ticket){
         return this.ticketRepository.add(ticket);
     }
@@ -486,6 +490,68 @@ public class RegistrationSystem
 
     public List<Vehicle> sortVehByParkNumber(boolean dir){
         return this.vehicleRepository.sortByParkNumber(dir);
+    }
+
+    public void moveVehicle(String oldDepot, String newDepot, String vin){
+        this.depotRepository.moveVehicle(oldDepot, newDepot, vin);
+    }
+
+    public List<Depot> sortDepots(boolean asc){
+        return this.depotRepository.sortByName(asc);
+    }
+
+    public void useTicketOnLine(Ticket ticket, String line){
+        this.lineRepository.useTicketOn(ticket,line);
+    }
+
+    public Integer getNextStationID(){
+        return this.stationRepository.getNextStationID();
+    }
+
+    public List<Station> filterStationByName(String name){
+        return this.stationRepository.filterByName(name);
+    }
+
+    public List<Station> sortStationsByName(boolean asc){
+        return this.stationRepository.sortByName(asc);
+    }
+
+    public void addStationToLine(Integer stationID, String lineNumber){
+        Station station = this.findStation(stationID);
+        Line line = this.findLine(lineNumber);
+        this.stationRepository.addStation(stationID,lineNumber);
+        this.lineRepository.addStation(lineNumber,station);
+    }
+
+    public void delStationFromLine(Integer stationID, String lineNumber){
+        Station station = this.findStation(stationID);
+        Line line = this.findLine(lineNumber);
+        this.stationRepository.delStation(stationID,lineNumber);
+        this.lineRepository.delStation(lineNumber,station);
+    }
+
+    public List<Line> sortLinesByLineNum(boolean asc){
+        return this.lineRepository.sortByLineNumber(asc);
+    }
+
+    public List<Line> sortLinesByTicketUse(boolean asc){
+        return this.lineRepository.sortNumberUsedTickets(asc);
+    }
+
+    public List<Line> filterLineByType(String type){
+        return this.lineRepository.filterByType(type);
+    }
+
+    public Integer getNextProgramID(){
+        return this.programRepository.getNextProgramID();
+    }
+
+    public List<Program> filterProgramsByVehicle(String vin){
+        return this.programRepository.filterByVehicle(vin);
+    }
+
+    public List<Program> sortProgramsByLine(boolean asc){
+        return this.programRepository.sortByLine(asc);
     }
 }
 

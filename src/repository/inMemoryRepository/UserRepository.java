@@ -4,7 +4,9 @@ import model.data.Ticket;
 import model.data.User;
 import model.data.UserType;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -23,7 +25,8 @@ public class UserRepository implements repository.interfaces.UserRepository {
         User user2 = new User("geani_dabu", "1");
         User user3 = new User("gica_de_la_scularie", "nea");
         User user4 = new User("madam-salam", "troleibuzul");
-        user1.addFare(new Ticket(3.0f, "Bilet", 1));
+        Ticket ticket = new Ticket(700.0f, "Abonament 6 luni", 1, LocalDate.parse("2022-11-13"));
+        user1.addFare(ticket);
         user2.setUserType(UserType.DIRECTOR);
         user3.setUserType(UserType.MAINTENANCE);
         user4.setUserType(UserType.DISPATCHER);
@@ -95,7 +98,9 @@ public class UserRepository implements repository.interfaces.UserRepository {
         this.find(username).addFare(ticket);
     }
 
-
+    public void delFare(String username, Ticket ticket){
+        this.find(username).removeFare(ticket);
+    }
 }
 
 

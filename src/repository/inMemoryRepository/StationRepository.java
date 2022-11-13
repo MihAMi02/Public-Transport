@@ -1,6 +1,7 @@
 package repository.inMemoryRepository;
 
 import model.comparators.StationNameComparator;
+import model.data.Line;
 import model.data.Station;
 
 import java.util.ArrayList;
@@ -18,8 +19,15 @@ public class StationRepository implements repository.interfaces.StationRepositor
     private void populate(){
         Station station1 = new Station(1, "Scoala Gimnaziala nr. 141", "Str. Muntii Carpati, Nr. 8");
         Station station2 = new Station(2, "Scoala Gimnaziala nr. 127", "Str. Muntii Carpati, Nr. 30");
+        Station station3 = new Station(3, "Bucur Obor", "Sos. Colentina, Nr. 2");
+        List<Station> stationList1 = new ArrayList<>();
+        stationList1.add(station1);
+        stationList1.add(station2);
+        station1.addLine("327");
+        station2.addLine("327");
         this.stationList.add(station1);
         this.stationList.add(station2);
+        this.stationList.add(station3);
     }
 
     @Override
@@ -78,4 +86,35 @@ public class StationRepository implements repository.interfaces.StationRepositor
         }
         return stationList;
     }
+
+    @Override
+    public List<Station> filterByName(String name) {
+        List<Station> result = new ArrayList<>();
+        for(Station station: stationList){
+            if(station.getName().equals(name)){
+                result.add(station);
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public Integer getNextStationID() {
+        int nextID = 0;
+        for(Station station: stationList){
+            nextID = station.getStationId();
+        }
+        return nextID + 1;
+    }
+
+    @Override
+    public void addStation(Integer stationID, String line) {
+        this.find(stationID).addLine(line);
+    }
+
+    @Override
+    public void delStation(Integer stationID, String line) {
+        this.find(stationID).delLine(line);
+    }
+
 }

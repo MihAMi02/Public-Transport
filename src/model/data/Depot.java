@@ -47,6 +47,14 @@ public class Depot {
         vehicles.add(v);
     }
 
+    @Override
+    public String toString() {
+        return "Depot{" +
+                "name='" + name + '\'' +
+                ", vehicles=" + vehicles +
+                '}';
+    }
+
     /**
      * removes vehicle with given string from depot
      * @param vin vin of vehicle

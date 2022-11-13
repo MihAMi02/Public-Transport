@@ -1,7 +1,10 @@
 package repository.inMemoryRepository;
 
+import model.comparators.LineNumberComparator;
+import model.comparators.LineUsedTicketsComparator;
 import model.data.Line;
 import model.data.Station;
+import model.data.Ticket;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +22,8 @@ public class LineRepository implements repository.interfaces.LineRepository {
         Station station1 = new Station(1, "Scoala Gimnaziala nr. 141", "Str. Muntii Carpati, Nr. 8");
         Station station2 = new Station(2, "Scoala Gimnaziala nr. 127", "Str. Muntii Carpati, Nr. 30");
         List<Station> stationList1 = new ArrayList<>();
+        station1.addLine("327");
+        station2.addLine("327");
         stationList1.add(station1);
         stationList1.add(station2);
         Line line1 = new Line("327", "Bus", "", stationList1);
@@ -71,16 +76,47 @@ public class LineRepository implements repository.interfaces.LineRepository {
 
     @Override
     public List<Line> filterByType(String type) {
-        return null;
+        List<Line> lines = new ArrayList<>();
+        for(Line line : lineList){
+            if(line.getType().equals(type))
+                lines.add(line);
+        }
+        return lines;
     }
+
 
     @Override
     public List<Line> sortByLineNumber(boolean ascending) {
-        return null;
+        if (ascending) {
+            this.lineList.sort(new LineNumberComparator());
+        } else {
+            this.lineList.sort(new LineNumberComparator().reversed());
+        }
+        return this.lineList;
     }
 
     @Override
     public List<Line> sortNumberUsedTickets(boolean ascending) {
-        return null;
+        if(ascending) {
+            this.lineList.sort(new LineUsedTicketsComparator());
+        } else {
+            this.lineList.sort(new LineUsedTicketsComparator().reversed());
+        }
+        return this.lineList;
+    }
+
+    @Override
+    public void useTicketOn(Ticket ticket, String line) {
+        this.find(line).useTicketOn(ticket);
+    }
+
+    @Override
+    public void addStation(String lineNumber, Station station) {
+        this.find(lineNumber).addStation(station);
+    }
+
+    @Override
+    public void delStation(String lineNumber, Station station) {
+        this.find(lineNumber).delStation(station);
     }
 }

@@ -11,4 +11,6 @@ public interface UserRepository extends CrudRepository<String, User>{
     List<Ticket> getUserFares(String username);
 
     void addFare(String username, Ticket ticket);
+
+    void delFare(String username, Ticket ticket);
 }

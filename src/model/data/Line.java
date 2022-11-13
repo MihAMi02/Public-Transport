@@ -5,6 +5,16 @@ import java.util.List;
 
 public class Line {
 
+    @Override
+    public String toString() {
+        return "Line{" +
+                "lineNumber='" + lineNumber + '\'' +
+                ", type='" + type + '\'' +
+                ", specialRequirement='" + specialRequirement + '\'' +
+                ", numUsedTickets=" + usedTickets.size() +
+                ", stationsList=" + stationsList +
+                '}';
+    }
 
     private String lineNumber;
     private String type;
@@ -17,6 +27,15 @@ public class Line {
         this.type = type;
         this.specialRequirement = specialRequirement;
         this.stationsList = stationsList;
+        this.usedTickets= new ArrayList<>();
+
+    }
+
+    public Line(String lineNumber, String type, String specialRequirement) {
+        this.lineNumber = lineNumber;
+        this.type = type;
+        this.specialRequirement = specialRequirement;
+        this.stationsList = new ArrayList<>();
         this.usedTickets= new ArrayList<>();
 
     }
@@ -61,13 +80,15 @@ public class Line {
         this.specialRequirement = specialRequirement;
     }
 
-    @Override
-    public String toString() {
-        return "Line{" +
-                "lineNumber='" + lineNumber + '\'' +
-                ", type='" + type + '\'' +
-                ", specialRequirement='" + specialRequirement + '\'' +
-                '}';
+    public void useTicketOn(Ticket ticket){
+        this.usedTickets.add(ticket);
     }
 
+    public void addStation(Station station){
+        this.stationsList.add(station);
+    }
+
+    public void delStation(Station station){
+        this.stationsList.remove(station);
+    }
 }

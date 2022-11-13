@@ -1,5 +1,6 @@
 package model.data;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Program {
@@ -7,8 +8,8 @@ public class Program {
     private Vehicle v;
     private Line line;
     private String shift;
-    private Date date;
-    public Program(int id, Vehicle v, Line line, String shift, Date date) {
+    private LocalDate date;
+    public Program(int id, Vehicle v, Line line, String shift, LocalDate date) {
         this.id = id;
         this.v = v;
         this.line = line;
@@ -48,11 +49,11 @@ public class Program {
         this.shift = shift;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
