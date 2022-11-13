@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import repository.interfaces.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -214,7 +215,7 @@ class RegistrationSystemTest {
         stationList1.add(station2);
         Line line1 = new Line("327", "Bus", "", stationList1);
 
-        Program program = new Program(2, bus, line1, "Evening", new Date());
+        Program program = new Program(2, bus, line1, "Evening", LocalDate.now());
 
         registrationSystem.addProgram(program);
 
@@ -240,7 +241,7 @@ class RegistrationSystemTest {
         stationList1.add(station2);
         Line line1 = new Line("327", "Bus", "", stationList1);
 
-        Program program = new Program(1, bus, line1, "Evening", new Date());
+        Program program = new Program(1, bus, line1, "Evening", LocalDate.now());
         registrationSystem.updateProgram(program, 1);
         Program result = registrationSystem.findProgram(1);
         assertEquals(result.getLine(), program.getLine());
@@ -262,7 +263,7 @@ class RegistrationSystemTest {
         stationList1.add(station2);
         Line line1 = new Line("327", "Bus", "", stationList1);
 
-        Program program = new Program(1, bus, line1, "Morning", new Date());
+        Program program = new Program(1, bus, line1, "Morning", LocalDate.now());
         Program result = registrationSystem.findProgram(1);
         assertEquals(result.getLine().getLineNumber(), program.getLine().getLineNumber());
         assertEquals(result.getId(), program.getId());
