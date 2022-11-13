@@ -159,7 +159,6 @@ public class View {
                     return;
                 } else {
                     this.controller.delTicketFromUser(username, ticket);
-                    return;
                 }
             }
         }
@@ -168,9 +167,9 @@ public class View {
                 long months = ChronoUnit.MONTHS.between(ticket.getBuyDate(), LocalDate.now());
                 if(months < 6){
                     this.controller.useTicketOnLine(ticket,line);
+                    return;
                 } else {
                     this.controller.delTicketFromUser(username, ticket);
-                    return;
                 }
             }
         }
@@ -179,9 +178,9 @@ public class View {
                 long months = ChronoUnit.MONTHS.between(ticket.getBuyDate(), LocalDate.now());
                 if(months < 1){
                     this.controller.useTicketOnLine(ticket,line);
+                    return;
                 } else {
                     this.controller.delTicketFromUser(username, ticket);
-                    return;
                 }
             }
         }
@@ -190,9 +189,9 @@ public class View {
                 long weeks = ChronoUnit.WEEKS.between(ticket.getBuyDate(), LocalDate.now());
                 if(weeks < 1){
                     this.controller.useTicketOnLine(ticket,line);
+                    return;
                 } else {
                     this.controller.delTicketFromUser(username, ticket);
-                    return;
                 }
             }
         }
@@ -201,9 +200,9 @@ public class View {
                 long days = ChronoUnit.DAYS.between(ticket.getBuyDate(), LocalDate.now());
                 if(days < 3){
                     this.controller.useTicketOnLine(ticket,line);
+                    return;
                 } else {
                     this.controller.delTicketFromUser(username, ticket);
-                    return;
                 }
             }
         }
@@ -212,9 +211,9 @@ public class View {
                 long days = ChronoUnit.DAYS.between(ticket.getBuyDate(), LocalDate.now());
                 if(days < 1){
                     this.controller.useTicketOnLine(ticket,line);
+                    return;
                 } else {
                     this.controller.delTicketFromUser(username, ticket);
-                    return;
                 }
             }
         }
