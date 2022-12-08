@@ -14,6 +14,8 @@ public interface VehicleRepository extends CrudRepository<String, Vehicle>
 
     List<Vehicle> filterByinMainetenanceStatus(boolean inMaintenance);
 
+    void refresh();
+
 }
 
 

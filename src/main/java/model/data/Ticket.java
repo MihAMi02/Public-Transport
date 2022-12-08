@@ -1,17 +1,21 @@
 package model.data;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 
 @Entity
+@AllArgsConstructor
 public class Ticket {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     private double value;
@@ -19,11 +23,16 @@ public class Ticket {
     private LocalDate buyDate;
     @Getter
     @Setter
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     private Customer userid;
 
-    public Ticket() {
+    @Getter
+    @Setter
+    @ManyToMany(mappedBy = "usedTickets")
+    private List<Line> linesUsedOn;
 
+    public Ticket() {
+        linesUsedOn = new ArrayList<>();
     }
 
     public LocalDate getBuyDate() {
@@ -76,6 +85,23 @@ public class Ticket {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public void addLine(Line line){
+        this.linesUsedOn.add(line);
+    }
+
+    public void delLine(Line line){
+        this.linesUsedOn.remove(line);
+    }
+
+    public Line getLine(String lineNumber) {
+        for(Line line: this.linesUsedOn){
+            if(Objects.equals(line.getLineNumber(), lineNumber)){
+                return line;
+            }
+        }
+        return null;
     }
 
 

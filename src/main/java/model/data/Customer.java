@@ -19,12 +19,14 @@ public class Customer {
     @Setter
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userID;
+    @Getter
+    @Setter
     private String username;
     private String password;
     private UserType userType;
     @Transient
     private RegistrationSystem registrationSystem;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.MERGE)
     private List<Ticket> tickets;
 
     public Customer(String username, String password) {
@@ -45,10 +47,6 @@ public class Customer {
 
     public Customer() {
 
-    }
-
-    public String getUsername() {
-        return username;
     }
 
     public String getPassword() {

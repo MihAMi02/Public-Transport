@@ -13,19 +13,24 @@ public class TicketRepository implements repository.interfaces.TicketRepository
 {
     private List<Ticket> tickets;
 
+    EntityManagerFactory factory ;
+
+    EntityManager manager ;
+
     public TicketRepository(){
         this.tickets = new ArrayList<>();
         fetch();
     }
 
     private void fetch(){
-        EntityManagerFactory factory = Persistence.createEntityManagerFactory("default");
-        EntityManager manager = factory.createEntityManager();
+        factory = Persistence.createEntityManagerFactory("default");
+        manager = factory.createEntityManager();
         tickets = manager.createQuery("SELECT ticket FROM Ticket ticket").getResultList();
     }
 
     @Override
     public boolean add(Ticket entity) {
+        manager.getTransaction().begin();
         boolean found = false;
         for(Ticket ticket: tickets){
             if(Objects.equals(ticket.getId(), entity.getId())){
@@ -33,30 +38,45 @@ public class TicketRepository implements repository.interfaces.TicketRepository
                 break;
             }
         }
+
         if(!found){
             this.tickets.add(entity);
+            manager.persist(entity);
+            manager.getTransaction().commit();
             return true;
         }
+        manager.getTransaction().commit();
         return false;
     }
 
     @Override
     public Ticket remove(Integer integer) {
+        manager.getTransaction().begin();
         Ticket temp = this.find(integer);
         if(temp != null){
+            manager.remove(temp);
             this.tickets.remove(temp);
         }
+        manager.getTransaction().commit();
         return temp;
     }
 
     @Override
-    public void update(Ticket newEntity, Integer integer) {
-        for(int i = 0; i < this.tickets.size(); i++){
-            if(this.tickets.get(i).getId().equals(integer)){
-                this.tickets.set(i, newEntity);
-            }
-        }
+    public void update(Ticket newEntity, Integer integer)
+    {
+       manager.getTransaction().begin();
+       Ticket ticket=new Ticket();
+       ticket.setId(newEntity.getId());
+       manager.find(Ticket.class,ticket.getId());
+       ticket.setType(newEntity.getType());
+       ticket.setValue(newEntity.getValue());
+       ticket.setUserid(newEntity.getUserid());
+       ticket.setBuyDate(newEntity.getBuyDate());
+       manager.getTransaction().commit();
+       tickets = manager.createQuery("SELECT ticket FROM Ticket ticket").getResultList();
     }
+
+
 
     @Override
     public Ticket find(Integer integer) {

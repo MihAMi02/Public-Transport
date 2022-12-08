@@ -9,7 +9,8 @@ import model.data.Ticket;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LineRepository implements repository.interfaces.LineRepository {
+public class LineRepository implements repository.interfaces.LineRepository
+{
 
     List<Line> lineList;
 
@@ -24,8 +25,8 @@ public class LineRepository implements repository.interfaces.LineRepository {
         Station station2 = new Station(2, "Scoala Gimnaziala nr. 127", "Str. Muntii Carpati, Nr. 30");
         Line line1 = new Line("327", "Bus", "");
         List<Station> stationList1 = new ArrayList<>();
-        station1.addLine(line1);
-        station2.addLine(line1);
+//        station1.addLine(line1);
+//        station2.addLine(line1);
         stationList1.add(station1);
         stationList1.add(station2);
         Line line2 = new Line("327", "Bus", "", stationList1);

@@ -24,8 +24,8 @@ public class StationRepository implements repository.interfaces.StationRepositor
         List<Station> stationList1 = new ArrayList<>();
         stationList1.add(station1);
         stationList1.add(station2);
-        station1.addLine(line2);
-        station2.addLine(line2);
+//        station1.addLine(line2);
+//        station2.addLine(line2);
         this.stationList.add(station1);
         this.stationList.add(station2);
         this.stationList.add(station3);
@@ -108,14 +108,14 @@ public class StationRepository implements repository.interfaces.StationRepositor
         return nextID + 1;
     }
 
-    @Override
-    public void addStation(Integer stationID, Line line) {
-        this.find(stationID).addLine(line);
-    }
-
-    @Override
-    public void delStation(Integer stationID, Line line) {
-        this.find(stationID).delLine(line);
-    }
+//    @Override
+//    public void addStation(Integer stationID, Line line) {
+//        this.find(stationID).addLine(line);
+//    }
+//
+//    @Override
+//    public void delStation(Integer stationID, Line line) {
+//        this.find(stationID).delLine(line);
+//    }
 
 }

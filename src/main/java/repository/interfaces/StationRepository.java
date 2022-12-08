@@ -12,6 +12,6 @@ public interface StationRepository extends CrudRepository<Integer, Station> {
 
     Integer getNextStationID();
 
-    void addStation(Integer stationID, Line line);
-    void delStation(Integer stationID, Line line);
+//    void addStation(Integer stationID, Line line);
+//    void delStation(Integer stationID, Line line);
 }

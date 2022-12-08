@@ -9,6 +9,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class RegistrationSystemTest
@@ -19,7 +21,8 @@ class RegistrationSystemTest
 
 
     @BeforeEach
-    void setUp(){
+    void setUp()
+    {
         DepotRepository depotRepository = new repository.inMemoryRepository.DepotRepository();
         EmployeeRepository employeeRepository=new repository.inMemoryRepository.EmployeeRepository();
         LineRepository lineRepository=new repository.inMemoryRepository.LineRepository();
@@ -41,11 +44,13 @@ class RegistrationSystemTest
     }
 
     @org.junit.jupiter.api.Test
-    void addDepot() {
+    void addDepot()
+    {
+
         Depot depot = new Depot("Titan");
 
-        Vehicle bus = new DieselVehicle("WEB62809123456788", "Mercedes-Benz", "Citaro (O530.09)", 2008, 180, "Bus", 4);
-        Vehicle tram = new ElectricVehicle("359", "Electroputere Craiova", "V3A-93", 1999, 300, "Tram", 65);
+        Vehicle bus = new DieselVehicle("WEB62809123456788", "Mercedes-Benz", "Citaro (O530.09)", 2008, 180, "Bus", 4, null);
+        Vehicle tram = new ElectricVehicle("359", "Electroputere Craiova", "V3A-93", 1999, 300, "Tram", 65, null);
 
         depot.addVehicle(bus);
         depot.addVehicle(tram);
@@ -54,13 +59,14 @@ class RegistrationSystemTest
         assertEquals(registrationSystem.findDepot("Titan"), depot);
         assertNotNull(registrationSystem.findDepot("Floreasca"));
         assertNotNull(registrationSystem.findDepot("Militari"));
+
     }
 
     @org.junit.jupiter.api.Test
     void removeDepot() {
         Depot depot = new Depot("Floreasca");
 
-        Vehicle bus = new DieselVehicle("WEB62809123456789", "Mercedes-Benz", "Citaro (O530.09)", 2008, 180, "Bus", 4);
+        Vehicle bus = new DieselVehicle("WEB62809123456789", "Mercedes-Benz", "Citaro (O530.09)", 2008, 180, "Bus", 4, null);
         depot.addVehicle(bus);
 
         Depot result = registrationSystem.removeDepot("Floreasca");
@@ -80,10 +86,11 @@ class RegistrationSystemTest
     }
 
     @org.junit.jupiter.api.Test
-    void updateDepot() {
+    void updateDepot()
+    {
         Depot depot = new Depot("Floreasca");
 
-        Vehicle bus = new DieselVehicle("WEB62809123456987", "Mercedes-Benz", "Citaro (O530.09)", 2008, 180, "Bus", 4);
+        Vehicle bus = new DieselVehicle("WEB62809123456987", "Mercedes-Benz", "Citaro (O530.09)", 2008, 180, "Bus", 4, null);
         depot.addVehicle(bus);
 
         registrationSystem.updateDepot(depot, "Floreasca");
@@ -106,7 +113,7 @@ class RegistrationSystemTest
     void findDepot() {
         Depot depot = new Depot("Floreasca");
 
-        Vehicle bus = new DieselVehicle("WEB62809123456789", "Mercedes-Benz", "Citaro (O530.09)", 2008, 180, "Bus", 4);
+        Vehicle bus = new DieselVehicle("WEB62809123456789", "Mercedes-Benz", "Citaro (O530.09)", 2008, 180, "Bus", 4, null);
         depot.addVehicle(bus);
 
         Depot result = registrationSystem.findDepot("Floreasca");
@@ -205,7 +212,7 @@ class RegistrationSystemTest
 
     @org.junit.jupiter.api.Test
     void addProgram() {
-        Vehicle bus = new DieselVehicle("WEB62809123456789", "Mercedes-Benz", "Citaro (O530.09)", 2008, 180, "Bus", 4);
+        Vehicle bus = new DieselVehicle("WEB62809123456789", "Mercedes-Benz", "Citaro (O530.09)", 2008, 180, "Bus", 4, null);
 
         Station station1 = new Station(1, "Scoala Gimnaziala nr. 141", "Str. Muntii Carpati, Nr. 8");
         Station station2 = new Station(2, "Scoala Gimnaziala nr. 127", "Str. Muntii Carpati, Nr. 30");
@@ -232,7 +239,7 @@ class RegistrationSystemTest
 
     @org.junit.jupiter.api.Test
     void updateProgram() {
-        Vehicle bus = new DieselVehicle("WEB62809123456789", "Mercedes-Benz", "Citaro (O530.09)", 2008, 180, "Bus", 4);
+        Vehicle bus = new DieselVehicle("WEB62809123456789", "Mercedes-Benz", "Citaro (O530.09)", 2008, 180, "Bus", 4, null);
 
         Station station1 = new Station(1, "Scoala Gimnaziala nr. 141", "Str. Muntii Carpati, Nr. 8");
         Station station2 = new Station(2, "Scoala Gimnaziala nr. 127", "Str. Muntii Carpati, Nr. 30");
@@ -254,7 +261,7 @@ class RegistrationSystemTest
 
     @org.junit.jupiter.api.Test
     void findProgram() {
-        Vehicle bus = new DieselVehicle("WEB62809123456789", "Mercedes-Benz", "Citaro (O530.09)", 2008, 180, "Bus", 4);
+        Vehicle bus = new DieselVehicle("WEB62809123456789", "Mercedes-Benz", "Citaro (O530.09)", 2008, 180, "Bus", 4, null);
 
         Station station1 = new Station(1, "Scoala Gimnaziala nr. 141", "Str. Muntii Carpati, Nr. 8");
         Station station2 = new Station(2, "Scoala Gimnaziala nr. 127", "Str. Muntii Carpati, Nr. 30");
@@ -396,17 +403,19 @@ class RegistrationSystemTest
     }
 
     @org.junit.jupiter.api.Test
-    void addVehicle() {
-        Vehicle bus = new DieselVehicle("WEB62809123456790", "Mercedes-Benz", "Citaro (O530.09)", 2008, 180, "Bus", 4);
+    void addVehicle()
+    {
+        Vehicle bus = new DieselVehicle("WEB62809123456790", "Mercedes-Benz", "Citaro (O530.09)", 2008, 180, "Bus", 4, null);
         registrationSystem.addVehicle(bus);
         assertNotNull(registrationSystem.findVehicle(bus.getVin()));
 
     }
 
     @org.junit.jupiter.api.Test
-    void removeVehicle() {
-        Vehicle bus = new DieselVehicle("WEB62809123456789", "Mercedes-Benz", "Citaro (O530.09)", 2008, 180, "Bus", 4);
-        Vehicle tram = new ElectricVehicle("3344", "CKD Tatra", "T4R", 1977, 100, "Tram", 65);
+    void removeVehicle()
+    {
+        Vehicle bus = new DieselVehicle("WEB62809123456789", "Mercedes-Benz", "Citaro (O530.09)", 2008, 180, "Bus", 4, null);
+        Vehicle tram = new ElectricVehicle("3344", "CKD Tatra", "T4R", 1977, 100, "Tram", 65, null);
         registrationSystem.addVehicle(tram);
         Vehicle result=registrationSystem.removeVehicle(tram.getVin());
         assertEquals(result.getVin(),tram.getVin());
@@ -415,21 +424,24 @@ class RegistrationSystemTest
     }
 
     @org.junit.jupiter.api.Test
-    void updateVehicle() {
-        Vehicle bus = new DieselVehicle("WEB62809123456789", "Mercedes-Benz", "Citaro (O530.09)", 2008, 180, "Bus", 4);
+    void updateVehicle()
+    {
+        Vehicle bus = new DieselVehicle("WEB62809123456789", "Mercedes-Benz", "Citaro (O530.09)", 2008, 180, "Bus", 4, null);
         bus.setInMaintenance(true);
         registrationSystem.updateVehicle(bus, "WEB62809123456789");
         assertTrue(registrationSystem.findVehicle("WEB62809123456789").isInMaintenance());
     }
 
     @org.junit.jupiter.api.Test
-    void findVehicle() {
+    void findVehicle()
+    {
         Vehicle result = registrationSystem.findVehicle("WEB62809123456789");
         assertNotNull(result);
     }
 
     @org.junit.jupiter.api.Test
-    void login() {
+    void login()
+    {
         Customer user1 = new Customer("ionel12", "parola");
         registrationSystem.login(user1.getUsername(), user1.getPassword());
     }

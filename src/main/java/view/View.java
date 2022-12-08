@@ -6,6 +6,7 @@ import repository.interfaces.*;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.sound.midi.Soundbank;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -139,6 +140,7 @@ public class View {
     private void buyFare(){
         System.out.println("\n\n\n\n\n\nPublic Transport Management Software v0.2");
         System.out.println("Available fares");
+
         int num = 1;
         for(TicketType type : this.controller.getTicketTypes()){
             System.out.println(num + " - " + type.getType() + "\t" + type.getValue() + " RON");
@@ -152,35 +154,35 @@ public class View {
             int amount = in.nextInt();
             int nextId = this.controller.getNextTicketID();
             for(int i=0; i<amount; i++){
-                this.controller.addTicketToUser(username, new Ticket(this.controller.getTicketTypes().get(0).getValue(), this.controller.getTicketTypes().get(0).getType(), nextId, LocalDate.now()));
                 this.controller.addTicket(new Ticket(this.controller.getTicketTypes().get(0).getValue(), this.controller.getTicketTypes().get(0).getType(), nextId, LocalDate.now()));
+//                this.controller.addTicket(new Ticket(nextId, this.controller.getTicketTypes().get(0).getValue(), this.controller.getTicketTypes().get(0).getType(), LocalDate.now(), this.controller.findUser(username)));
+                this.controller.addTicketToUser(username, new Ticket(this.controller.getTicketTypes().get(0).getValue(), this.controller.getTicketTypes().get(0).getType(), nextId, LocalDate.now()));
                 nextId++;
             }
 
         } else if (value == 2) {
             int nextId = this.controller.getNextTicketID();
-            this.controller.addTicketToUser(username, new Ticket(this.controller.getTicketTypes().get(1).getValue(), this.controller.getTicketTypes().get(1).getType(), nextId, LocalDate.now()));
             this.controller.addTicket(new Ticket(this.controller.getTicketTypes().get(1).getValue(), this.controller.getTicketTypes().get(1).getType(), nextId, LocalDate.now()));
-        } else if (value == 3) {
-            int nextId = this.controller.getNextTicketID();
+            this.controller.addTicketToUser(username, new Ticket(this.controller.getTicketTypes().get(1).getValue(), this.controller.getTicketTypes().get(1).getType(), nextId, LocalDate.now()));
+            } else if (value == 3) {
+            int nextId = this.controller.getNextTicketID();this.controller.addTicket(new Ticket(this.controller.getTicketTypes().get(2).getValue(), this.controller.getTicketTypes().get(2).getType(), nextId, LocalDate.now()));
             this.controller.addTicketToUser(username, new Ticket(this.controller.getTicketTypes().get(2).getValue(), this.controller.getTicketTypes().get(2).getType(), nextId, LocalDate.now()));
-            this.controller.addTicket(new Ticket(this.controller.getTicketTypes().get(2).getValue(), this.controller.getTicketTypes().get(2).getType(), nextId, LocalDate.now()));
         } else if (value == 4) {
             int nextId = this.controller.getNextTicketID();
-            this.controller.addTicketToUser(username, new Ticket(this.controller.getTicketTypes().get(3).getValue(), this.controller.getTicketTypes().get(3).getType(), nextId, LocalDate.now()));
             this.controller.addTicket(new Ticket(this.controller.getTicketTypes().get(3).getValue(), this.controller.getTicketTypes().get(3).getType(), nextId, LocalDate.now()));
+            this.controller.addTicketToUser(username, new Ticket(this.controller.getTicketTypes().get(3).getValue(), this.controller.getTicketTypes().get(3).getType(), nextId, LocalDate.now()));
         } else if (value == 5) {
             int nextId = this.controller.getNextTicketID();
-            this.controller.addTicketToUser(username, new Ticket(this.controller.getTicketTypes().get(4).getValue(), this.controller.getTicketTypes().get(4).getType(), nextId, LocalDate.now()));
             this.controller.addTicket(new Ticket(this.controller.getTicketTypes().get(4).getValue(), this.controller.getTicketTypes().get(4).getType(), nextId, LocalDate.now()));
+            this.controller.addTicketToUser(username, new Ticket(this.controller.getTicketTypes().get(4).getValue(), this.controller.getTicketTypes().get(4).getType(), nextId, LocalDate.now()));
         } else if (value == 6) {
             int nextId = this.controller.getNextTicketID();
-            this.controller.addTicketToUser(username, new Ticket(this.controller.getTicketTypes().get(5).getValue(), this.controller.getTicketTypes().get(5).getType(), nextId, LocalDate.now()));
             this.controller.addTicket(new Ticket(this.controller.getTicketTypes().get(5).getValue(), this.controller.getTicketTypes().get(5).getType(), nextId, LocalDate.now()));
+            this.controller.addTicketToUser(username, new Ticket(this.controller.getTicketTypes().get(5).getValue(), this.controller.getTicketTypes().get(5).getType(), nextId, LocalDate.now()));
         } else if (value == 7) {
             int nextId = this.controller.getNextTicketID();
-            this.controller.addTicketToUser(username, new Ticket(this.controller.getTicketTypes().get(6).getValue(), this.controller.getTicketTypes().get(6).getType(), nextId, LocalDate.now()));
             this.controller.addTicket(new Ticket(this.controller.getTicketTypes().get(6).getValue(), this.controller.getTicketTypes().get(6).getType(), nextId, LocalDate.now()));
+            this.controller.addTicketToUser(username, new Ticket(this.controller.getTicketTypes().get(6).getValue(), this.controller.getTicketTypes().get(6).getType(), nextId, LocalDate.now()));
         }
     }
 
@@ -351,7 +353,7 @@ public class View {
                 Scanner updateInfo = new Scanner(System.in);
                 String VIN = updateInfo.nextLine();
                 Vehicle vehicle = this.controller.findVehicle(VIN);
-                ElectricVehicle copy = new ElectricVehicle(vehicle.getVin(), vehicle.getMake(), vehicle.getModel(), vehicle.getBuilt(), vehicle.getCapacity(), "invalid", 0);
+                ElectricVehicle copy = new ElectricVehicle(vehicle.getVin(), vehicle.getMake(), vehicle.getModel(), vehicle.getBuilt(), vehicle.getCapacity(), "invalid", 0, null);
                 boolean usingCopy = false;
                 if(vehicle instanceof DieselVehicle){
                     System.out.println("Is this vehicle being converted to electric? (y/n)");
@@ -546,7 +548,7 @@ public class View {
                 Scanner updateInfo = new Scanner(System.in);
                 String VIN = updateInfo.nextLine();
                 Vehicle vehicle = this.controller.findVehicle(VIN);
-                ElectricVehicle copy = new ElectricVehicle(vehicle.getVin(), vehicle.getMake(), vehicle.getModel(), vehicle.getBuilt(), vehicle.getCapacity(), "invalid", 0);
+                ElectricVehicle copy = new ElectricVehicle(vehicle.getVin(), vehicle.getMake(), vehicle.getModel(), vehicle.getBuilt(), vehicle.getCapacity(), "invalid", 0, null);
                 boolean usingCopy = false;
                 if(vehicle instanceof DieselVehicle){
                     System.out.println("Is this vehicle being converted to electric? (y/n)");
@@ -643,8 +645,13 @@ public class View {
                             copy.setElectricEfficiency(Integer.parseInt(ans));
                         }
                         copy.setParkNumber(vehicle.getParkNumber());
+
+                        Depot temp = vehicle.getDepot();
+                        this.controller.delVehicleToDepot(temp, vehicle);
                         this.controller.removeVehicle(VIN);
+                        copy.setDepot(temp);
                         this.controller.addVehicle(copy);
+                        this.controller.addVehicleToDepot(temp, copy);
                     }
                 }
 
@@ -661,49 +668,58 @@ public class View {
                     String VIN = vehicleInput.nextLine();
                     System.out.print("parkNumber: ");
                     String parkNum = vehicleInput.nextLine();
+                    System.out.print("depot: ");
+                    String depot = vehicleInput.nextLine();
                     System.out.print("make: ");
                     String make = vehicleInput.nextLine();
                     System.out.print("model: ");
                     String model = vehicleInput.nextLine();
+                    System.out.print("type: ");
+                    String type = vehicleInput.nextLine();
                     System.out.print("built: ");
                     int built = vehicleInput.nextInt();
                     System.out.print("capacity: ");
                     int cap = vehicleInput.nextInt();
-                    System.out.print("type: ");
-                    String type = vehicleInput.nextLine();
                     System.out.print("euronorm: ");
                     int euronorm = vehicleInput.nextInt();
-                    DieselVehicle dv = new DieselVehicle(VIN, make, model, built, cap, type, euronorm);
+                    DieselVehicle dv = new DieselVehicle(VIN, make, model, built, cap, type, euronorm, controller.findDepot(depot));
                     dv.setParkNumber(parkNum);
                     this.controller.addVehicle(dv);
+                    this.controller.addVehicleToDepot(controller.findDepot(depot), dv);
                 } else if (ans.equals("ELECTRIC")) {
                     Scanner vehicleInput = new Scanner(System.in);
                     System.out.print("VIN: ");
                     String VIN = vehicleInput.nextLine();
                     System.out.print("parkNumber: ");
                     String parkNum = vehicleInput.nextLine();
+                    System.out.print("depot: ");
+                    String depot = vehicleInput.nextLine();
                     System.out.print("make: ");
                     String make = vehicleInput.nextLine();
                     System.out.print("model: ");
                     String model = vehicleInput.nextLine();
+                    System.out.print("type: ");
+                    String type = vehicleInput.nextLine();
                     System.out.print("built: ");
                     int built = vehicleInput.nextInt();
                     System.out.print("capacity: ");
                     int cap = vehicleInput.nextInt();
-                    System.out.print("type: ");
-                    String type = vehicleInput.nextLine();
                     System.out.print("electricEfficiency: ");
                     int eff = vehicleInput.nextInt();
-                    ElectricVehicle ev = new ElectricVehicle(VIN, make, model, built, cap, type, eff);
+                    ElectricVehicle ev = new ElectricVehicle(VIN, make, model, built, cap, type, eff, controller.findDepot(depot));
                     ev.setParkNumber(parkNum);
                     this.controller.addVehicle(ev);
+                    this.controller.addVehicleToDepot(controller.findDepot(depot), ev);
+
                 }
             } else if (answer == 8) {
                 System.out.println("\n\n\n\n\n\nPublic Transport Management Software v0.2");
                 System.out.println("What vehicle should be removed?");
                 System.out.print("VIN: ");
                 Scanner ans = new Scanner(System.in);
-                this.controller.removeVehicle(ans.nextLine());
+                Vehicle temp = this.controller.findVehicle(ans.nextLine());
+                this.controller.delVehicleToDepot(this.controller.findDepot(temp.getDepot().getName()), temp);
+                this.controller.removeVehicle(temp.getVin());
             } else if (answer == 9) {
                 break;
             }
@@ -1052,8 +1068,8 @@ public class View {
         while (true) {
             System.out.println("\n\n\n\n\n\nPublic Transport Management Software v0.2");
             System.out.println("1 - Add Program");
-            System.out.println("2 - Filter Programs by vehicle");
-            System.out.println("3 - Sort Programs by line");
+            System.out.println("2 - Sort Programs by line");
+            System.out.println("3 - Filter Programs by vehicle");
             System.out.println("4 - Return");
             Scanner in = new Scanner(System.in);
             int answer = in.nextInt();
@@ -1109,21 +1125,6 @@ public class View {
 
     public void mainMenu() {
         setUpHibernate();
-        manager.getTransaction().begin();
-        Customer user1 = new Customer("ionel12", "parola");
-        Customer user2 = new Customer("geani_dabu", "1");
-        Customer user3 = new Customer("gica_de_la_scularie", "nea");
-        Customer user4 = new Customer("madam-salam", "troleibuzul");
-        Ticket ticket = new Ticket(700.0f, "Abonament 6 luni", LocalDate.parse("2022-11-13"));
-        manager.persist(ticket);
-        user1.addFare(ticket);
-        user2.setUserType(UserType.DIRECTOR);
-        user3.setUserType(UserType.MAINTENANCE);
-        user4.setUserType(UserType.DISPATCHER);
-        manager.persist(user1);
-        manager.persist(user2);
-        manager.persist(user3);
-        manager.persist(user4);
         while(true){
             if(this.loggedInUserType == null) {
                 System.out.println("\n\n\n\n\n\nPublic Transport Management Software v0.2");
@@ -1209,9 +1210,9 @@ public class View {
                 } else if (answer == 2) {
                     this.loggedInUserType = null;
                 }
-
+//                manager.getTransaction().commit();
             }
         }
-        manager.getTransaction().commit();
+//        manager.getTransaction().commit();
     }
 }

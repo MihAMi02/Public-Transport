@@ -18,14 +18,14 @@ public class ProgramRepository implements repository.interfaces.ProgramRepositor
     }
 
     private void populate(){
-        Vehicle bus = new DieselVehicle("WEB62809123456789", "Mercedes-Benz", "Citaro (O530.09)", 2008, 180, "Bus", 4);
+        Vehicle bus = new DieselVehicle("WEB62809123456789", "Mercedes-Benz", "Citaro (O530.09)", 2008, 180, "Bus", 4, null);
 
         Station station1 = new Station(1, "Scoala Gimnaziala nr. 141", "Str. Muntii Carpati, Nr. 8");
         Station station2 = new Station(2, "Scoala Gimnaziala nr. 127", "Str. Muntii Carpati, Nr. 30");
         Line line2 = new Line("327", "Bus", "");
         List<Station> stationList1 = new ArrayList<>();
-        station1.addLine(line2);
-        station2.addLine(line2);
+//        station1.addLine(line2);
+//        station2.addLine(line2);
         stationList1.add(station1);
         stationList1.add(station2);
         Line line1 = new Line("327", "Bus", "", stationList1);

@@ -13,8 +13,8 @@ public class ElectricVehicle extends Vehicle
     private String type;
     private int electricEfficiency;
 
-    public ElectricVehicle(String vin, String make, String model, int built, int capacity, String type, int electricEfficiency) {
-        super(vin, make, model, built, capacity);
+    public ElectricVehicle(String vin, String make, String model, int built, int capacity, String type, int electricEfficiency, Depot depot) {
+        super(vin, make, model, built, capacity, depot);
         this.type = type;
         this.electricEfficiency = electricEfficiency;
     }

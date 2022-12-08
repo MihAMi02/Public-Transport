@@ -17,10 +17,11 @@ public class VehicleRepository implements repository.interfaces.VehicleRepositor
         populate();
     }
 
-    private void populate(){
-        Vehicle bus = new DieselVehicle("WEB62809123456789", "Mercedes-Benz", "Citaro (O530.09)", 2008, 180, "Bus", 4);
-        Vehicle bus2 = new DieselVehicle("WEB62809123456700", "Mercedes-Benz", "Citaro (O530.09)", 2008, 180, "Bus", 4);
-        Vehicle tram = new ElectricVehicle("3344", "CKD Tatra", "T4R", 1977, 100, "Tram", 65);
+    private void populate()
+    {
+        Vehicle bus = new DieselVehicle("WEB62809123456789", "Mercedes-Benz", "Citaro (O530.09)", 2008, 180, "Bus", 4, null);
+        Vehicle bus2 = new DieselVehicle("WEB62809123456700", "Mercedes-Benz", "Citaro (O530.09)", 2008, 180, "Bus", 4, null);
+        Vehicle tram = new ElectricVehicle("3344", "CKD Tatra", "T4R", 1977, 100, "Tram", 65, null);
         bus.setParkNumber("4681");
         bus2.setParkNumber("4661");
         tram.setParkNumber("3344");
@@ -121,5 +122,10 @@ public class VehicleRepository implements repository.interfaces.VehicleRepositor
             }
         }
         return resultList;
+    }
+
+    @Override
+    public void refresh(){
+
     }
 }

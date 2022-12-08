@@ -9,7 +9,8 @@ import javax.persistence.Persistence;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TicketTypeRepository implements repository.interfaces.TicketTypeRepository {
+public class TicketTypeRepository implements repository.interfaces.TicketTypeRepository
+{
     private List<TicketType> ticketTypes;
 
     public TicketTypeRepository(){
@@ -17,22 +18,29 @@ public class TicketTypeRepository implements repository.interfaces.TicketTypeRep
         fetch();
     }
 
-    private void fetch(){
+    private void fetch()
+    {
         EntityManagerFactory factory = Persistence.createEntityManagerFactory("default");
         EntityManager manager = factory.createEntityManager();
-        ticketTypes = manager.createQuery("SELECT ticket FROM Ticket ticket").getResultList();
+        manager.getTransaction().begin();
+        ticketTypes = manager.createQuery("SELECT ticket FROM TicketType ticket").getResultList();
+        manager.getTransaction().commit();
     }
 
     @Override
-    public List<TicketType> getAllTypes() {
+    public List<TicketType> getAllTypes()
+    {
         return this.ticketTypes;
     }
 
     @Override
-    public boolean add(TicketType entity) {
+    public boolean add(TicketType entity)
+    {
         boolean found = false;
-        for(TicketType type : ticketTypes){
-            if(type.getType().equals(entity.getType())){
+        for(TicketType type : ticketTypes)
+        {
+            if(type.getType().equals(entity.getType()))
+            {
                 found = true;
                 break;
             }

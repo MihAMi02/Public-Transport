@@ -532,14 +532,14 @@ public class RegistrationSystem
     public void addStationToLine(Integer stationID, String lineNumber){
         Station station = this.findStation(stationID);
         Line line = this.findLine(lineNumber);
-        this.stationRepository.addStation(stationID,line);
+//        this.stationRepository.addStation(stationID,line);
         this.lineRepository.addStation(lineNumber,station);
     }
 
     public void delStationFromLine(Integer stationID, String lineNumber){
         Station station = this.findStation(stationID);
         Line line = this.findLine(lineNumber);
-        this.stationRepository.delStation(stationID,line);
+//        this.stationRepository.delStation(stationID,line);
         this.lineRepository.delStation(lineNumber,station);
     }
 
@@ -566,6 +566,17 @@ public class RegistrationSystem
     public List<Program> sortProgramsByLine(boolean asc){
         return this.programRepository.sortByLine(asc);
     }
+
+    public void addVehicleToDepot(Depot depot, Vehicle vehicle){
+        this.depotRepository.addVehicleToDepot(depot,vehicle);
+        this.vehicleRepository.refresh();
+    }
+
+    public void delVehicleToDepot(Depot depot, Vehicle vehicle){
+        this.depotRepository.delVehicleToDepot(depot,vehicle);
+        this.vehicleRepository.refresh();
+    }
+
 }
 
 

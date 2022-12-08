@@ -9,15 +9,20 @@ import model.data.Ticket;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LineRepository implements repository.interfaces.LineRepository {
+public class LineRepository implements repository.interfaces.LineRepository
+{
     List<Line> lineList;
 
+    EntityManagerFactory factory ;
+    EntityManager manager ;
+
     private void fetch(){
-        EntityManagerFactory factory = Persistence.createEntityManagerFactory("default");
-        EntityManager manager = factory.createEntityManager();
+         factory = Persistence.createEntityManagerFactory("default");
+         manager = factory.createEntityManager();
         lineList = manager.createQuery("SELECT line FROM Line line").getResultList();
     }
 
@@ -31,6 +36,7 @@ public class LineRepository implements repository.interfaces.LineRepository {
 
     @Override
     public boolean add(Line entity) {
+        manager.getTransaction().begin();
         boolean found = false;
         for(Line line : this.lineList){
             if(line.getLineNumber().equals(entity.getLineNumber())){
@@ -40,33 +46,50 @@ public class LineRepository implements repository.interfaces.LineRepository {
         }
         if(!found){
             this.lineList.add(entity);
+            manager.persist(entity);
+            manager.getTransaction().commit();
             return true;
         }
+        manager.getTransaction().commit();
         return false;
     }
 
     @Override
-    public Line remove(String s) {
+    public Line remove(String s)
+    {
+        manager.getTransaction().begin();
         Line temp = this.find(s);
-        if(temp != null){
+        if(temp != null)
+        {
             this.lineList.remove(temp);
+            manager.remove(temp);
         }
+        manager.getTransaction().commit();
         return temp;
     }
 
     @Override
-    public void update(Line newEntity, String s) {
-        for(int i=0; i<this.lineList.size(); i++){
-            if(this.lineList.get(i).getLineNumber().equals(s)){
-                this.lineList.set(i, newEntity);
-            }
-        }
+    public void update(Line newEntity, String s)
+    {
+       manager.getTransaction().begin();
+       Line line =new Line();
+       line.setLineNumber(newEntity.getLineNumber());
+       manager.find(Line.class,line.getLineNumber());
+       line.setType(newEntity.getType());
+       line.setSpecialRequirement(newEntity.getSpecialRequirement());
+       line.setStationsList(newEntity.getStationsList());
+       line.setUsedTickets(newEntity.getUsedTickets());
+       manager.getTransaction().commit();
+       lineList = manager.createQuery("SELECT line FROM Line line").getResultList();
+
     }
 
     @Override
-    public Line find(String s) {
+    public Line find(String s)
+    {
         for(Line line : this.lineList){
-            if(line.getLineNumber().equals(s)){
+            if(line.getLineNumber().equals(s))
+            {
                 return line;
             }
         }
@@ -74,48 +97,72 @@ public class LineRepository implements repository.interfaces.LineRepository {
     }
 
     @Override
-    public List<Line> filterByType(String type) {
-        List<Line> lines = new ArrayList<>();
-        for(Line line : lineList){
-            if(line.getType().equals(type))
-                lines.add(line);
-        }
+    public List<Line> filterByType(String type)
+    {
+        manager.getTransaction().begin();
+        Query query = manager.createQuery("select line from Line line where line.type=:type_name");
+        query.setParameter("type_name", type);
+        List<Line> lines = query.getResultList();
+        manager.getTransaction().commit();
         return lines;
     }
 
 
     @Override
-    public List<Line> sortByLineNumber(boolean ascending) {
-        if (ascending) {
-            this.lineList.sort(new LineNumberComparator());
-        } else {
-            this.lineList.sort(new LineNumberComparator().reversed());
-        }
-        return this.lineList;
+    public List<Line> sortByLineNumber(boolean ascending)
+    {
+        manager.getTransaction().begin();
+        Query query = manager.createQuery("select line from Line line order by line.lineNumber ASC");
+        if(!ascending)
+            query = manager.createQuery("select line from Line line order by line.lineNumber DESC");
+        List<Line> lines = query.getResultList();
+        manager.getTransaction().commit();
+        return lines;
     }
 
     @Override
     public List<Line> sortNumberUsedTickets(boolean ascending) {
-        if(ascending) {
-            this.lineList.sort(new LineUsedTicketsComparator());
-        } else {
-            this.lineList.sort(new LineUsedTicketsComparator().reversed());
-        }
-        return this.lineList;
+        manager.getTransaction().begin();
+        Query query = manager.createQuery("select line from Line line order by line.usedTickets.size ASC");
+        if(!ascending)
+            query = manager.createQuery("select line from Line line order by line.usedTickets.size DESC");
+
+        List<Line> lines = query.getResultList();
+        manager.getTransaction().commit();
+        return lines;
     }
 
     @Override
     public void useTicketOn(Ticket ticket, String line) {
-        this.find(line).useTicketOn(ticket);
+        manager.getTransaction().begin();
+        Line temp = this.find(line);
+        manager.find(Line.class, temp.getLineNumber());
+        manager.find(Ticket.class, ticket.getId());
+        temp.useTicketOn(ticket);
+        manager.getTransaction().commit();
     }
 
     @Override
-    public void addStation(String lineNumber, Station station) {
-        this.find(lineNumber).addStation(station);
+    public void addStation(String lineNumber, Station station)
+    {
+        manager.getTransaction().begin();
+        Line temp = this.find(lineNumber);
+        manager.find(Line.class, temp.getLineNumber());
+        manager.find(Station.class, station.getStationId());
+        temp.addStation(station);
+        station.addLine(temp);
+        manager.getTransaction().commit();
     }
 
     @Override
     public void delStation(String lineNumber, Station station) {
-        this.find(lineNumber).delStation(station);
+        manager.getTransaction().begin();
+        Line temp = this.find(lineNumber);
+        manager.find(Line.class, temp.getLineNumber());
+        manager.find(Station.class, station.getStationId());
+        temp.delStation(station);
+        station.delLine(temp);
+        manager.getTransaction().commit();
     }
 }
+

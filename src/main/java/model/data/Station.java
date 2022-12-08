@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,9 +20,9 @@ public class Station
     private int stationId;
     private String name;
     private String address;
-    @OneToMany
     @Getter
     @Setter
+    @ManyToMany(mappedBy = "stationsList")
     private List<Line> linesCalling;
 
     public Station(int stationId, String name, String address)
@@ -42,7 +43,7 @@ public class Station
                 "stationId=" + stationId +
                 ", name='" + name + '\'' +
                 ", address='" + address + '\'' +
-                ", linesCalling=" + linesCalling +
+//                ", linesCalling=" + linesCalling +
                 '}';
     }
 

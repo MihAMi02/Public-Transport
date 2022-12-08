@@ -2,14 +2,17 @@ package model.data;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Index;
+import javax.persistence.Table;
 
 
 @Entity
-
+@Table(indexes = {@Index(columnList = "value")})
 public class TicketType {
 
     @Id
     private String type;
+
     private float value;
 
     public TicketType() {

@@ -9,7 +9,7 @@ import java.util.List;
 
 
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+//@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Table(name="vehicle")
 public abstract class Vehicle
 {
@@ -25,7 +25,7 @@ public abstract class Vehicle
 
     @Getter
     @Setter
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     private Depot depot;
 
 
@@ -39,7 +39,7 @@ public abstract class Vehicle
 
     private boolean inMaintenance;
 
-    public Vehicle(String vin, String make, String model, int built, int capacity)
+    public Vehicle(String vin, String make, String model, int built, int capacity, Depot depot)
     {
         this.vin = vin;
         this.parkNumber = null;
@@ -49,6 +49,7 @@ public abstract class Vehicle
         this.capacity = capacity;
         this.driverID = null;
         this.inMaintenance = false;
+        this.depot = depot;
     }
 
     public Vehicle() {

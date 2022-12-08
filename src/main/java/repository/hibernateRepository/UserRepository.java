@@ -6,6 +6,7 @@ import model.data.Customer;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,21 +14,25 @@ import java.util.List;
 public class UserRepository implements repository.interfaces.UserRepository
 {
     List<Customer> userList;
+    EntityManagerFactory factory;
+    EntityManager manager;
 
     public UserRepository(){
         this.userList = new ArrayList<>();
         fetch();
     }
 
-    private void fetch(){
-        EntityManagerFactory factory = Persistence.createEntityManagerFactory("default");
-        EntityManager manager = factory.createEntityManager();
+    private void fetch()
+    {
+        factory = Persistence.createEntityManagerFactory("default");
+        manager = factory.createEntityManager();
         userList = manager.createQuery("SELECT customer FROM Customer customer").getResultList();
     }
 
 
     @Override
     public boolean add(Customer entity) {
+        manager.getTransaction().begin();
         boolean found = false;
         for(Customer user : this.userList){
             if(user.getUsername().equals(entity.getUsername())){
@@ -37,27 +42,38 @@ public class UserRepository implements repository.interfaces.UserRepository
         }
         if(!found){
             this.userList.add(entity);
+            manager.persist(entity);
+            manager.getTransaction().commit();
             return true;
         }
+        manager.getTransaction().commit();
         return false;
     }
 
     @Override
     public Customer remove(String s) {
+        manager.getTransaction().begin();
         Customer temp = this.find(s);
         if(temp != null){
             this.userList.remove(temp);
+            manager.remove(temp);
         }
+        manager.getTransaction().commit();
         return temp;
     }
 
     @Override
-    public void update(Customer newEntity, String s) {
-        for(int i=0; i<this.userList.size(); i++){
-            if(this.userList.get(i).getUsername().equals(s)){
-                this.userList.set(i, newEntity);
-            }
-        }
+    public void update(Customer newEntity, String s)
+    {
+        manager.getTransaction().begin();
+        Customer customer = new Customer();
+        customer.setUserID(newEntity.getUserID());
+        manager.find(Customer.class, customer.getUserID());
+        customer.setUserType(newEntity.getUserType());
+        customer.setUsername(newEntity.getUsername());
+        customer.setPassword(newEntity.getPassword());
+        manager.getTransaction().commit();
+        userList = manager.createQuery("SELECT customer FROM Customer customer").getResultList();
     }
 
     @Override
@@ -84,11 +100,38 @@ public class UserRepository implements repository.interfaces.UserRepository
     }
 
     @Override
-    public void addFare(String username, Ticket ticket) {
-        this.find(username).addFare(ticket);
+    public void addFare(String username, Ticket ticket)
+    {
+
+        manager.getTransaction().begin();
+        Customer customer = this.find(username);
+        manager.find(Customer.class, customer.getUserID());
+
+        Ticket temp = new Ticket();
+        temp.setId(ticket.getId());
+        manager.find(Ticket.class, temp.getId());
+        ticket.setUserid(customer);
+
+        customer.addFare(ticket);
+        manager.getTransaction().commit();
+
+
     }
 
+
     public void delFare(String username, Ticket ticket){
-        this.find(username).removeFare(ticket);
+
+        manager.getTransaction().begin();
+        Customer customer = this.find(username);
+        manager.find(Customer.class, customer.getUserID());
+
+        Ticket temp = new Ticket();
+        temp.setId(ticket.getId());
+        manager.find(Ticket.class, temp.getId());
+        ticket.setUserid(customer);
+
+        customer.removeFare(ticket);
+
+        manager.getTransaction().commit();
     }
 }

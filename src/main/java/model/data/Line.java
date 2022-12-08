@@ -1,9 +1,9 @@
 package model.data;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,20 +29,24 @@ public class Line
     }
 
     @Id
-
-
-
     private String lineNumber;
     private String type;
     private String specialRequirement;
 
 
-    @OneToMany
+    @ManyToMany(cascade = { CascadeType.MERGE })
+    @JoinTable(name = "Ticket_Line", joinColumns = @JoinColumn(name = "lineNumber", nullable = true), inverseJoinColumns = @JoinColumn(name = "id", nullable = true))
     private List<Ticket> usedTickets;
-    @OneToMany
+    @Getter
+    @Setter
+    @ManyToMany(cascade = { CascadeType.MERGE })
+    @JoinTable(name = "Station_Line", joinColumns = @JoinColumn(name = "lineNumber", nullable = true), inverseJoinColumns = @JoinColumn(name = "stationId", nullable = true))
     private List<Station> stationsList;
 
-    public Line(String lineNumber, String type, String specialRequirement, List<Station> stationsList) {
+
+
+    public Line(String lineNumber, String type, String specialRequirement, List<Station> stationsList)
+    {
         this.lineNumber = lineNumber;
         this.type = type;
         this.specialRequirement = specialRequirement;
@@ -60,20 +64,12 @@ public class Line
 
     }
 
-    public List<Station> getStationsList() {
-        return stationsList;
-    }
-
     public List<Ticket> getUsedTickets() {
         return usedTickets;
     }
 
     public void setUsedTickets(List<Ticket> usedTickets) {
         this.usedTickets = usedTickets;
-    }
-
-    public void setStationsList(List<Station> stationsList) {
-        this.stationsList = stationsList;
     }
 
     public String getLineNumber() {

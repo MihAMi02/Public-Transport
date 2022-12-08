@@ -10,13 +10,16 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProgramRepository implements repository.interfaces.ProgramRepository {
+public class ProgramRepository implements repository.interfaces.ProgramRepository
+{
     private List<Program> programList;
+    EntityManagerFactory factory ;
+    EntityManager manager;
 
     private void fetch(){
-        EntityManagerFactory factory = Persistence.createEntityManagerFactory("default");
-        EntityManager manager = factory.createEntityManager();
-        programList = manager.createQuery("SELECT program FROM Program program").getResultList();
+     factory = Persistence.createEntityManagerFactory("default");
+     manager = factory.createEntityManager();
+     programList = manager.createQuery("SELECT program FROM Program program").getResultList();
     }
 
 
@@ -29,6 +32,7 @@ public class ProgramRepository implements repository.interfaces.ProgramRepositor
 
     @Override
     public boolean add(Program entity) {
+        manager.getTransaction().begin();
         boolean found = false;
         for(Program program : this.programList){
             if(program.getId() == entity.getId()){
@@ -38,27 +42,39 @@ public class ProgramRepository implements repository.interfaces.ProgramRepositor
         }
         if(!found){
             this.programList.add(entity);
+            manager.persist(entity);
+            manager.getTransaction().commit();
             return true;
         }
+        manager.getTransaction().commit();
         return false;
     }
 
     @Override
     public Program remove(Integer integer) {
+        manager.getTransaction().begin();
         Program temp = this.find(integer);
         if(temp != null){
             this.programList.remove(temp);
+            manager.remove(temp);
         }
+        manager.getTransaction().commit();
         return temp;
     }
 
     @Override
-    public void update(Program newEntity, Integer integer) {
-        for(int i=0; i<this.programList.size(); i++){
-            if(this.programList.get(i).getId() == integer){
-                this.programList.set(i, newEntity);
-            }
-        }
+    public void update(Program newEntity, Integer integer)
+    {
+       manager.getTransaction().begin();
+       Program program=new Program();
+       program.setId(newEntity.getId());
+       manager.find(Program.class,program.getId());
+       program.setDate(newEntity.getDate());
+       program.setLine(newEntity.getLine());
+       program.setV(newEntity.getV());
+       program.setShift(newEntity.getShift());
+       manager.getTransaction().commit();
+       programList = manager.createQuery("SELECT program FROM Program program").getResultList();
     }
 
     @Override

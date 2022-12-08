@@ -22,8 +22,8 @@ public class DepotRepository implements repository.interfaces.DepotRepository {
         Depot depot1 = new Depot("Floreasca");
         Depot depot2 = new Depot("Militari");
 
-        Vehicle bus = new DieselVehicle("WEB62809123456789", "Mercedes-Benz", "Citaro (O530.09)", 2008, 180, "Bus", 4);
-        Vehicle tram = new ElectricVehicle("3344", "CKD Tatra", "T4R", 1977, 100, "Tram", 65);
+        Vehicle bus = new DieselVehicle("WEB62809123456789", "Mercedes-Benz", "Citaro (O530.09)", 2008, 180, "Bus", 4, null);
+        Vehicle tram = new ElectricVehicle("3344", "CKD Tatra", "T4R", 1977, 100, "Tram", 65, null);
 
         depot1.addVehicle(bus);
         depot2.addVehicle(tram);
@@ -92,6 +92,14 @@ public class DepotRepository implements repository.interfaces.DepotRepository {
     public void moveVehicle(String fromDepot, String toDepot, String vin) {
         Vehicle temp = this.find(fromDepot).removeVehicle(vin);
         this.find(toDepot).addVehicle(temp);
+    }
+
+    @Override
+    public void addVehicleToDepot(Depot depot, Vehicle vehicle){
+    }
+
+    @Override
+    public void delVehicleToDepot(Depot depot, Vehicle vehicle){
     }
 
 }

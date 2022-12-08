@@ -21,8 +21,7 @@ public class Depot
     private String address;
 
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name="VIN")
+    @OneToMany(cascade = CascadeType.MERGE)
     private List<Vehicle> vehicles;
 
 
@@ -42,10 +41,8 @@ public class Depot
 
 
 
-    public Depot() {
-
-
-
+    public Depot()
+    {
         vehicles=new ArrayList<>();
 
     }
