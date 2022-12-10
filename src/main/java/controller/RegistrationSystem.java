@@ -1,5 +1,10 @@
 package controller;
 
+import Verkehrbestrieb_exceptions.EmployeeException;
+import Verkehrbestrieb_exceptions.IncorrectCNPException;
+import Verkehrbestrieb_exceptions.StationNotFoundException;
+import lombok.SneakyThrows;
+import model.comparators.StationNameComparator;
 import model.data.*;
 import repository.interfaces.*;
 
@@ -377,8 +382,13 @@ public class RegistrationSystem
      * sets the employee repository
      * @param employeeRepository instance of class which implements employeeRepository interface
      */
-    public void setEmployeeRepository(EmployeeRepository employeeRepository) {
+    public void setEmployeeRepository(EmployeeRepository employeeRepository) throws EmployeeException {
         this.employeeRepository = employeeRepository;
+        List<Employee> employees = this.employeeRepository.sortByName(true);
+        for(Employee employee: employees){
+            employee.vaildateCNP();
+            employee.validateRole();
+        }
     }
 
 
@@ -513,6 +523,10 @@ public class RegistrationSystem
         return this.depotRepository.sortByName(asc);
     }
 
+    public List<Employee> sortEmployees(boolean asc){
+        return this.employeeRepository.sortByName(asc);
+    }
+
     public void useTicketOnLine(Ticket ticket, String line){
         this.lineRepository.useTicketOn(ticket,line);
     }
@@ -529,15 +543,23 @@ public class RegistrationSystem
         return this.stationRepository.sortByName(asc);
     }
 
-    public void addStationToLine(Integer stationID, String lineNumber){
+
+    public void addStationToLine(Integer stationID, String lineNumber) throws StationNotFoundException{
         Station station = this.findStation(stationID);
+        if(station == null){
+            throw new StationNotFoundException("Station is missing from Station Repository! Please add the Station before adding it to a Line");
+        }
         Line line = this.findLine(lineNumber);
 //        this.stationRepository.addStation(stationID,line);
         this.lineRepository.addStation(lineNumber,station);
     }
 
-    public void delStationFromLine(Integer stationID, String lineNumber){
+
+    public void delStationFromLine(Integer stationID, String lineNumber) throws StationNotFoundException{
         Station station = this.findStation(stationID);
+        if(station == null){
+            throw new StationNotFoundException("Station is missing from Station Repository!");
+        }
         Line line = this.findLine(lineNumber);
 //        this.stationRepository.delStation(stationID,line);
         this.lineRepository.delStation(lineNumber,station);

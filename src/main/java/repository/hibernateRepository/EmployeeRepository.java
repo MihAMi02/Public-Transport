@@ -1,5 +1,7 @@
 package repository.hibernateRepository;
 
+import model.comparators.DepotNameComparator;
+import model.comparators.EmployeeNameComparator;
 import model.data.Employee;
 
 import javax.persistence.EntityManager;
@@ -113,7 +115,16 @@ public class EmployeeRepository implements repository.interfaces.EmployeeReposit
 
     @Override
     public List<Employee> sortByName(boolean ascending) {
-        return null;
+
+        if(ascending)
+        {
+            this.employeeList.sort(new EmployeeNameComparator());
+        }
+        else
+        {
+            this.employeeList.sort(new EmployeeNameComparator().reversed());
+        }
+        return this.employeeList;
     }
 }
 

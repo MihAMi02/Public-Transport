@@ -1,6 +1,8 @@
 package view;
 
+import Verkehrbestrieb_exceptions.*;
 import controller.RegistrationSystem;
+import lombok.SneakyThrows;
 import model.data.*;
 import repository.interfaces.*;
 import javax.persistence.EntityManager;
@@ -69,7 +71,7 @@ public class View {
         System.out.println("Successfully logged in as: " + username);
     }
 
-    private void setUpInMemory(){
+    private void setUpInMemory() throws EmployeeException {
 
         DepotRepository depotRepository = new repository.inMemoryRepository.DepotRepository();
         EmployeeRepository employeeRepository=new repository.inMemoryRepository.EmployeeRepository();
@@ -95,7 +97,7 @@ public class View {
     }
 
 
-    private void setUpHibernate(){
+    private void setUpHibernate() throws EmployeeException{
 
         DepotRepository depotRepository         =new repository.hibernateRepository.DepotRepository();
         EmployeeRepository employeeRepository   =new repository.hibernateRepository.EmployeeRepository();
@@ -267,7 +269,8 @@ public class View {
         }
     }
 
-    private void maintenanceVehicles() {
+
+    private void maintenanceVehicles() throws VehicleNotFoundException {
         while(true){
             System.out.println("\n\n\n\n\n\nPublic Transport Management Software v0.2");
             System.out.println("1 - Find vehicle by VIN");
@@ -353,6 +356,9 @@ public class View {
                 Scanner updateInfo = new Scanner(System.in);
                 String VIN = updateInfo.nextLine();
                 Vehicle vehicle = this.controller.findVehicle(VIN);
+                if(vehicle == null){
+                    throw new VehicleNotFoundException("Vehicle is missing from Vehicle Repository! Please make sure you have added the Vehicle before editing it!");
+                }
                 ElectricVehicle copy = new ElectricVehicle(vehicle.getVin(), vehicle.getMake(), vehicle.getModel(), vehicle.getBuilt(), vehicle.getCapacity(), "invalid", 0, null);
                 boolean usingCopy = false;
                 if(vehicle instanceof DieselVehicle){
@@ -460,7 +466,8 @@ public class View {
         }
     }
 
-    private void directorVehicles(){
+
+    private void directorVehicles() throws VehicleNotFoundException {
         while(true){
             System.out.println("\n\n\n\n\n\nPublic Transport Management Software v0.2");
             System.out.println("1 - Find vehicle by VIN");
@@ -548,6 +555,9 @@ public class View {
                 Scanner updateInfo = new Scanner(System.in);
                 String VIN = updateInfo.nextLine();
                 Vehicle vehicle = this.controller.findVehicle(VIN);
+                if(vehicle == null){
+                    throw new VehicleNotFoundException("Vehicle is missing from Vehicle Repository! Please make sure you have added the Vehicle before editing it!");
+                }
                 ElectricVehicle copy = new ElectricVehicle(vehicle.getVin(), vehicle.getMake(), vehicle.getModel(), vehicle.getBuilt(), vehicle.getCapacity(), "invalid", 0, null);
                 boolean usingCopy = false;
                 if(vehicle instanceof DieselVehicle){
@@ -718,6 +728,9 @@ public class View {
                 System.out.print("VIN: ");
                 Scanner ans = new Scanner(System.in);
                 Vehicle temp = this.controller.findVehicle(ans.nextLine());
+                if(temp == null){
+                    throw new VehicleNotFoundException("Vehicle is missing from Vehicle Repository! Please make sure you have added the Vehicle before editing it!");
+                }
                 this.controller.delVehicleToDepot(this.controller.findDepot(temp.getDepot().getName()), temp);
                 this.controller.removeVehicle(temp.getVin());
             } else if (answer == 9) {
@@ -808,6 +821,92 @@ public class View {
                 String lineNum = input.nextLine();
                 this.controller.removeLine(lineNum);
             } else if (answer == 4) {
+                break;
+            }
+        }
+    }
+
+    private void directorEmployees() throws VerkehrsbetriebException {
+        while(true){
+            System.out.println("\n\n\n\n\n\nPublic Transport Management Software v0.2");
+            System.out.println("1 - Find employee");
+            System.out.println("2 - Add employee");
+            System.out.println("3 - Remove employee");
+            System.out.println("4 - Edit employee");
+            System.out.println("5 - Sort employees by name");
+            System.out.println("6 - Return");
+            Scanner in = new Scanner(System.in);
+            int answer = in.nextInt();
+            if (answer == 1){
+                Scanner input = new Scanner(System.in);
+                System.out.print("CNP: ");
+                String cnp = input.nextLine();
+                System.out.println(this.controller.findEmployee(cnp));
+            } else if (answer == 2) {
+                Scanner input = new Scanner(System.in);
+                System.out.print("CNP: ");
+                String cnp = input.nextLine();
+                System.out.print("Full name: ");
+                String fullname = input.nextLine();
+                System.out.print("Role: ");
+                String role = input.nextLine();
+                System.out.print("Workplace: ");
+                String workplace = input.nextLine();
+                System.out.print("Salary: ");
+                int salary = input.nextInt();
+                this.controller.addEmployee(new Employee(cnp, fullname, role, workplace, salary));
+            } else if (answer == 3) {
+                Scanner input = new Scanner(System.in);
+                System.out.print("CNP: ");
+                String cnp = input.nextLine();
+                this.controller.removeEmployee(cnp);
+            } else if (answer == 4) {
+                System.out.println("What employee should be edited?");
+                System.out.print("CNP: ");
+                Scanner updateInfo = new Scanner(System.in);
+                String cnp = updateInfo.nextLine();
+                Employee employee = this.controller.findEmployee(cnp);
+                if(employee == null){
+                    throw new EmployeeNotFoundException("Employee is missing from Vehicle Repository! Please make sure you have added the Employee before editing them!");
+                }
+                System.out.println("Input k to keep following details");
+                System.out.println("Fullname: " + employee.getFullname());
+                String input = updateInfo.nextLine();
+                if(!input.equals("k")){
+                    employee.setFullname(input);
+                }
+                System.out.println("Role: " + employee.getRole());
+                input = updateInfo.nextLine();
+                if(!input.equals("k")){
+                    employee.setRole(input);
+                }
+                System.out.println("Workplace: " + employee.getWorkplace());
+                input = updateInfo.nextLine();
+                if(!input.equals("k")){
+                    employee.setWorkplace(input);
+                }
+                System.out.println("Salary: " + employee.getSalary());
+                input  = updateInfo.nextLine();
+                if(!input.equals("k")){
+                    employee.setSalary(Integer.parseInt(input));
+                }
+                this.controller.updateEmployee(employee, employee.getCnp());
+            } else if (answer == 5) {
+                Scanner input = new Scanner(System.in);
+                System.out.println("Ascending? (y/n)");
+                String ans = input.nextLine();
+                if (ans.equals("y")){
+                    List<Employee> temp = this.controller.sortEmployees(true);
+                    for(Employee depot:temp){
+                        System.out.println(depot);
+                    }
+                } else if (ans.equals("n")){
+                    List<Employee> temp = this.controller.sortEmployees(false);
+                    for(Employee depot:temp){
+                        System.out.println(depot);
+                    }
+                }
+            } else if (answer == 6) {
                 break;
             }
         }
@@ -908,7 +1007,7 @@ public class View {
         }
     }
 
-    private void dispatcherStations(){
+    private void dispatcherStations() throws StationNotFoundException{
         while (true) {
             System.out.println("\n\n\n\n\n\nPublic Transport Management Software v0.2");
             System.out.println("1 - Add station");
@@ -964,6 +1063,9 @@ public class View {
                 System.out.print("Station ID: ");
                 int sid = input.nextInt();
                 Station oldStation = this.controller.findStation(sid);
+                if(oldStation == null){
+                    throw new StationNotFoundException("Station is missing from the repository! Please make sure to add the station before editing it!");
+                }
                 System.out.println("Input k to keep the values");
                 System.out.println("Station Name: " + oldStation.getName());
                 String ans = input.nextLine();
@@ -982,7 +1084,7 @@ public class View {
         }
     }
 
-    private void dispatcherLines(){
+    private void dispatcherLines() throws StationNotFoundException{
         while (true) {
             System.out.println("\n\n\n\n\n\nPublic Transport Management Software v0.2");
             System.out.println("1 - Filter lines by type");
@@ -1123,7 +1225,7 @@ public class View {
         }
     }
 
-    public void mainMenu() {
+    public void mainMenu() throws VerkehrsbetriebException {
         setUpHibernate();
         while(true){
             if(this.loggedInUserType == null) {
@@ -1165,7 +1267,8 @@ public class View {
                 System.out.println("1 - Manage vehicles");
                 System.out.println("2 - Manage depots");
                 System.out.println("3 - Manage lines");
-                System.out.println("4 - Log out");
+                System.out.println("4 - Manage employees");
+                System.out.println("5 - Log out");
                 Scanner in = new Scanner(System.in);
                 int answer = in.nextInt();
                 if (answer == 1) {
@@ -1175,6 +1278,8 @@ public class View {
                 } else if (answer == 3) {
                     directorLines();
                 } else if (answer == 4) {
+                    directorEmployees();
+                } else if (answer == 5) {
                     this.loggedInUserType = null;
                 }
             } else if (this.loggedInUserType == UserType.DISPATCHER) {

@@ -1,5 +1,7 @@
 package test;
 
+import Verkehrbestrieb_exceptions.EmployeeException;
+import Verkehrbestrieb_exceptions.IncorrectCNPException;
 import controller.RegistrationSystem;
 import model.data.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,6 +10,9 @@ import repository.interfaces.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+
+
 
 
 
@@ -21,7 +26,7 @@ class RegistrationSystemTest
 
 
     @BeforeEach
-    void setUp()
+    void setUp() throws EmployeeException
     {
         DepotRepository depotRepository = new repository.inMemoryRepository.DepotRepository();
         EmployeeRepository employeeRepository=new repository.inMemoryRepository.EmployeeRepository();
@@ -133,7 +138,7 @@ class RegistrationSystemTest
     }
 
     @org.junit.jupiter.api.Test
-    void addEmployee() {
+    void addEmployee() throws IncorrectCNPException {
         Employee employee=new Employee(1,"712817981098","Andrei Creci","Chef","Depotplace",2000);
 
         registrationSystem.addEmployee(employee);
@@ -144,7 +149,7 @@ class RegistrationSystemTest
     }
 
     @org.junit.jupiter.api.Test
-    void removeEmployee() {
+    void removeEmployee() throws IncorrectCNPException {
         Employee employee2 = new Employee(2, "5060809123455", "Dabu Oprica Geani", "Director", "Floreasca", 5000);
         Employee result=registrationSystem.removeEmployee(employee2.getCnp());
 
@@ -154,7 +159,7 @@ class RegistrationSystemTest
     }
 
     @org.junit.jupiter.api.Test
-    void updateEmployee() {
+    void updateEmployee() throws IncorrectCNPException {
 
         Employee employee=new Employee(1,"712817981098","Andrei Creci","Chef","Depotplace",2000);
         registrationSystem.updateEmployee(employee,"5060809123455");
@@ -166,7 +171,7 @@ class RegistrationSystemTest
     }
 
     @org.junit.jupiter.api.Test
-    void findEmployee() {
+    void findEmployee() throws IncorrectCNPException {
         Employee employee2 = new Employee(2, "5060809123455", "Dabu Oprica Geani", "Director", "Floreasca", 5000);
 
         Employee result=registrationSystem.findEmployee("5060809123455");
