@@ -1,6 +1,7 @@
 package model.data;
 
 
+import Verkehrbestrieb_exceptions.EmployeeException;
 import Verkehrbestrieb_exceptions.IncorectEmployeeRoleException;
 import Verkehrbestrieb_exceptions.IncorrectCNPException;
 import lombok.Getter;
@@ -9,6 +10,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Objects;
+
 
 @Entity
 //@Table(name = "employees")
@@ -35,7 +37,7 @@ public class Employee
     private String vehicle;
 
 
-    public Employee(int id, String cnp, String fullname, String role, String workplace, int salary) throws IncorrectCNPException{
+    public Employee(int id, String cnp, String fullname, String role, String workplace, int salary) throws EmployeeException{
         this.EmployeeID=id;
         this.cnp = cnp;
         this.vaildateCNP();
@@ -44,9 +46,10 @@ public class Employee
         this.workplace = workplace;
         this.salary = salary;
         this.vehicle = null;
+        validateRole();
     }
 
-    public Employee(String cnp, String fullname, String role, String workplace, int salary) throws IncorrectCNPException
+    public Employee(String cnp, String fullname, String role, String workplace, int salary) throws EmployeeException
     {
         this.cnp = cnp;
         this.vaildateCNP();
@@ -55,9 +58,10 @@ public class Employee
         this.workplace = workplace;
         this.salary = salary;
         this.vehicle = null;
+        vaildateCNP();
     }
 
-    public Employee() {
+    public Employee() throws EmployeeException{
 
     }
 
@@ -72,13 +76,16 @@ public class Employee
         } else if (Objects.equals(this.role, "Cleaning Personnel")) {
             correctRole = true;
         }
-        if(!correctRole){
+        if(!correctRole)
+        {
             throw new IncorectEmployeeRoleException(this.cnp +" Has invalid role");
         }
     }
 
-    public void vaildateCNP() throws IncorrectCNPException{
-        if (cnp.length() != 13) {
+    public void vaildateCNP() throws IncorrectCNPException
+    {
+        if (cnp.length() != 13)
+        {
             throw new IncorrectCNPException(this.cnp + ": CNP doesn't the correct amount of characters");
         }
 
@@ -93,22 +100,22 @@ public class Employee
             throw new IncorrectCNPException(this.cnp + ": CNP contains wrong sex/century");
         }
 
-        int year = 0;
+        int year = LocalDate.now().getYear() % 100;
+        year -= 18;
+        long byear=0;
 
         //see if year is closer than 18 years ago
         if(cod / 1000000000000L == 5 || cod / 1000000000000L == 6){
-            long temp = cod / 10000000000L;
-            temp %= 100L;
+            byear = cod / 10000000000L;
+            byear %= 100L;
 //            System.out.print("Year = " + temp + " + ");
-            year = LocalDate.now().getYear() / 100;
-            year -= 18;
-            if(temp > year) {
+            if(byear > year) {
                 throw new IncorrectCNPException(this.cnp + ": CNP is of person too young to work");
             }
         }
 
         //if year is closer than 18 years ago check month/day
-        if(year != 0){
+        if(year == byear){
             long month = cod / 100000000L;
             month %= 100L;
 //            System.out.print("Month = " + month + " + ");

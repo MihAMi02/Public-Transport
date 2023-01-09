@@ -102,6 +102,11 @@ public class DepotRepository implements repository.interfaces.DepotRepository {
     public void delVehicleToDepot(Depot depot, Vehicle vehicle){
     }
 
+    @Override
+    public void refresh(){
+
+    }
+
 }
 
 

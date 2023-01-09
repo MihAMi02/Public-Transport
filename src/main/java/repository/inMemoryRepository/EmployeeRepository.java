@@ -1,5 +1,6 @@
 package repository.inMemoryRepository;
 
+import Verkehrbestrieb_exceptions.EmployeeException;
 import Verkehrbestrieb_exceptions.IncorrectCNPException;
 import model.comparators.EmployeeNameComparator;
 import model.data.Employee;
@@ -11,15 +12,15 @@ public class EmployeeRepository implements repository.interfaces.EmployeeReposit
 
     List<Employee> employeeList;
 
-    public EmployeeRepository() throws IncorrectCNPException{
+    public EmployeeRepository() throws EmployeeException{
         this.employeeList = new ArrayList<>();
         populate();
     }
 
-    private void populate() throws IncorrectCNPException
+    private void populate() throws EmployeeException
     {
-        Employee employee1 = new Employee(1, "5060809123456", "Circa Honorius Edward Adrian", "Driver", "Floreasca", 2300);
-        Employee employee2 = new Employee(2, "5060809123455", "Dabu Oprica Geani", "Director", "Floreasca", 5000);
+        Employee employee1 = new Employee(1, "1851212210544", "Circa Honorius Edward Adrian", "Driver", "Floreasca", 2300);
+        Employee employee2 = new Employee(2, "1851212210552", "Dabu Oprica Geani", "Director", "Floreasca", 5000);
         this.employeeList.add(employee1);
         this.employeeList.add(employee2);
     }

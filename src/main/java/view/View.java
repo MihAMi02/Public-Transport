@@ -10,6 +10,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.sound.midi.Soundbank;
 
+
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -68,10 +69,10 @@ public class View {
             System.out.println("\nUsername already taken, try again");
         }
         System.out.println("Successfully created account: " + username);
-        System.out.println("Successfully logged in as: " + username);
     }
 
-    private void setUpInMemory() throws EmployeeException {
+    private void setUpInMemory() throws EmployeeException
+    {
 
         DepotRepository depotRepository = new repository.inMemoryRepository.DepotRepository();
         EmployeeRepository employeeRepository=new repository.inMemoryRepository.EmployeeRepository();
@@ -122,7 +123,8 @@ public class View {
         controller.setTicketRepository(ticketRepository);
     }
 
-    private void viewFares(){
+    private void viewFares()
+    {
         System.out.println("\n\n\n\n\n\nPublic Transport Management Software v0.2");
         List<Ticket> tickets = this.controller.getUserFares(username);
         for(TicketType type : this.controller.getTicketTypes()){
@@ -166,7 +168,7 @@ public class View {
             int nextId = this.controller.getNextTicketID();
             this.controller.addTicket(new Ticket(this.controller.getTicketTypes().get(1).getValue(), this.controller.getTicketTypes().get(1).getType(), nextId, LocalDate.now()));
             this.controller.addTicketToUser(username, new Ticket(this.controller.getTicketTypes().get(1).getValue(), this.controller.getTicketTypes().get(1).getType(), nextId, LocalDate.now()));
-            } else if (value == 3) {
+        } else if (value == 3) {
             int nextId = this.controller.getNextTicketID();this.controller.addTicket(new Ticket(this.controller.getTicketTypes().get(2).getValue(), this.controller.getTicketTypes().get(2).getType(), nextId, LocalDate.now()));
             this.controller.addTicketToUser(username, new Ticket(this.controller.getTicketTypes().get(2).getValue(), this.controller.getTicketTypes().get(2).getType(), nextId, LocalDate.now()));
         } else if (value == 4) {
@@ -200,7 +202,6 @@ public class View {
                     return;
                 } else {
                     this.controller.delTicketFromUser(username, ticket);
-                    return;
                 }
             }
         }
@@ -209,9 +210,9 @@ public class View {
                 long months = ChronoUnit.MONTHS.between(ticket.getBuyDate(), LocalDate.now());
                 if(months < 6){
                     this.controller.useTicketOnLine(ticket,line);
+                    return;
                 } else {
                     this.controller.delTicketFromUser(username, ticket);
-                    return;
                 }
             }
         }
@@ -220,9 +221,9 @@ public class View {
                 long months = ChronoUnit.MONTHS.between(ticket.getBuyDate(), LocalDate.now());
                 if(months < 1){
                     this.controller.useTicketOnLine(ticket,line);
+                    return;
                 } else {
                     this.controller.delTicketFromUser(username, ticket);
-                    return;
                 }
             }
         }
@@ -243,9 +244,9 @@ public class View {
                 long days = ChronoUnit.DAYS.between(ticket.getBuyDate(), LocalDate.now());
                 if(days < 3){
                     this.controller.useTicketOnLine(ticket,line);
+                    return;
                 } else {
                     this.controller.delTicketFromUser(username, ticket);
-                    return;
                 }
             }
         }
@@ -254,9 +255,9 @@ public class View {
                 long days = ChronoUnit.DAYS.between(ticket.getBuyDate(), LocalDate.now());
                 if(days < 1){
                     this.controller.useTicketOnLine(ticket,line);
+                    return;
                 } else {
                     this.controller.delTicketFromUser(username, ticket);
-                    return;
                 }
             }
         }
@@ -359,107 +360,18 @@ public class View {
                 if(vehicle == null){
                     throw new VehicleNotFoundException("Vehicle is missing from Vehicle Repository! Please make sure you have added the Vehicle before editing it!");
                 }
-                ElectricVehicle copy = new ElectricVehicle(vehicle.getVin(), vehicle.getMake(), vehicle.getModel(), vehicle.getBuilt(), vehicle.getCapacity(), "invalid", 0, null);
-                boolean usingCopy = false;
-                if(vehicle instanceof DieselVehicle){
-                    System.out.println("Is this vehicle being converted to electric? (y/n)");
-                    Scanner in2 = new Scanner(System.in);
-                    String ans = in2.nextLine();
-                    if (ans.equals("y")){
-                        usingCopy = true;
+                if(vehicle.isInMaintenance()){
+                    System.out.println("Do you want to put this vehicle out of maintenance? (y/n)");
+                    if(updateInfo.nextLine().equals("y")) {
+                        vehicle.setInMaintenance(false);
+                    }
+                } else {
+                    System.out.println("Do you want to put this vehicle into maintenance? (y/n)");
+                    if(updateInfo.nextLine().equals("y")) {
+                        vehicle.setInMaintenance(true);
                     }
                 }
-                System.out.println("Input k to keep following details");
-                System.out.println("ParkNumber: " + vehicle.getParkNumber());
-                String input = updateInfo.nextLine();
-                if(!input.equals("k")){
-                    if(usingCopy){
-                        copy.setParkNumber(input);
-                    } else {
-                        vehicle.setParkNumber(input);
-                    }
-                }
-                System.out.println("Make: " + vehicle.getMake());
-                input = updateInfo.nextLine();
-                if(!input.equals("k")){
-                    if(usingCopy){
-                        copy.setMake(input);
-                    } else {
-                        vehicle.setMake(input);
-                    }
-                }
-                System.out.println("Model: " + vehicle.getModel());
-                input = updateInfo.nextLine();
-                if(!input.equals("k")){
-                    if(usingCopy){
-                        copy.setModel(input);
-                    } else {
-                        vehicle.setModel(input);
-                    }
-                }
-                System.out.println("Built: " + vehicle.getBuilt());
-                input = updateInfo.nextLine();
-                if(!input.equals("k")){
-                    if(usingCopy){
-                        copy.setBuilt(Integer.parseInt(input));
-                    } else {
-                        vehicle.setBuilt(Integer.parseInt(input));
-                    }
-                }
-                System.out.println("Capacity: " + vehicle.getCapacity());
-                input = updateInfo.nextLine();
-                if(!input.equals("k")){
-                    if(usingCopy){
-                        copy.setCapacity(Integer.parseInt(input));
-                    } else {
-                        vehicle.setCapacity(Integer.parseInt(input));
-                    }
-                }
-                if ((vehicle instanceof ElectricVehicle ev)){
-                    System.out.println("Type: " + ev.getType());
-                    Scanner electric = new Scanner(System.in);
-                    String ans = electric.nextLine();
-                    if(!ans.equals("k")){
-                        ev.setType(ans);
-                    }
-                    System.out.println("Electric eff: " + ev.getElectricEfficiency());
-                    ans = electric.nextLine();
-                    if(!ans.equals("k")){
-                        ev.setElectricEfficiency(Integer.parseInt(ans));
-                    }
-                    this.controller.updateVehicle(ev,VIN);
-                } else if (vehicle instanceof DieselVehicle dv) {
-                    if(!usingCopy) {
-                        System.out.println("Type: " + dv.getType());
-                        Scanner electric = new Scanner(System.in);
-                        String ans = electric.nextLine();
-                        if (!ans.equals("k")) {
-                            dv.setType(ans);
-                        }
-                        System.out.println("Euronorm: " + dv.getEuronorm());
-                        ans = electric.nextLine();
-                        if (!ans.equals("k")) {
-                            dv.setEuronorm(Integer.parseInt(ans));
-                        }
-                        this.controller.updateVehicle(dv,VIN);
-                    } else {
-                        System.out.println("Type: " + copy.getType());
-                        Scanner electric = new Scanner(System.in);
-                        String ans = electric.nextLine();
-                        if (!ans.equals("k")) {
-                            copy.setType(ans);
-                        }
-                        System.out.println("Electric Eff: " + copy.getElectricEfficiency());
-                        ans = electric.nextLine();
-                        if (!ans.equals("k")) {
-                            copy.setElectricEfficiency(Integer.parseInt(ans));
-                        }
-                        copy.setParkNumber(vehicle.getParkNumber());
-                        this.controller.removeVehicle(VIN);
-                        this.controller.addVehicle(copy);
-                    }
-                }
-
+                this.controller.updateVehicle(vehicle, vehicle.getVin());
             } else if (answer == 7) {
                 break;
             }
@@ -658,9 +570,17 @@ public class View {
 
                         Depot temp = vehicle.getDepot();
                         this.controller.delVehicleToDepot(temp, vehicle);
+                        List<Program> programs = this.controller.filterProgramsByVehicle(vehicle.getVin());
+                        for(Program program: programs){
+                            this.controller.removeProgram(program.getId());
+                        }
                         this.controller.removeVehicle(VIN);
                         copy.setDepot(temp);
                         this.controller.addVehicle(copy);
+                        for(Program program: programs){
+                            program.setV(copy);
+                            this.controller.addProgram(program);
+                        }
                         this.controller.addVehicleToDepot(temp, copy);
                     }
                 }
@@ -751,14 +671,17 @@ public class View {
             Scanner in = new Scanner(System.in);
             int answer = in.nextInt();
             if(answer == 1){
+                System.out.println("Depot name: ");
                 Scanner input = new Scanner(System.in);
                 String name = input.nextLine();
                 System.out.println(this.controller.findDepot(name));
             } else if (answer == 2) {
+                System.out.println("Depot name: ");
                 Scanner input = new Scanner(System.in);
                 String name = input.nextLine();
                 this.controller.addDepot(new Depot(name));
             } else if (answer == 3) {
+                System.out.println("Depot name: ");
                 Scanner input = new Scanner(System.in);
                 String name = input.nextLine();
                 this.controller.removeDepot(name);
@@ -779,13 +702,11 @@ public class View {
                 }
             } else if (answer == 5) {
                 Scanner input = new Scanner(System.in);
-                System.out.println("Depot from where to move: ");
-                String oldDepotName = input.nextLine();
                 System.out.println("Depot where to move to: ");
                 String newDepotName = input.nextLine();
                 System.out.println("VIN of vehicle to be moved: ");
                 String vin = input.nextLine();
-                this.controller.moveVehicle(oldDepotName, newDepotName, vin);
+                this.controller.moveVehicle(this.controller.findVehicle(vin).getDepot().getName(), newDepotName, vin);
             } else if (answer == 6) {
                 break;
             }
@@ -920,8 +841,7 @@ public class View {
             System.out.println("3 - Find vehicles in maintenance");
             System.out.println("4 - Sort vehicles by Park Number");
             System.out.println("5 - Sort vehicles by Build Year");
-            System.out.println("6 - Move Vehicle");
-            System.out.println("7 - Return");
+            System.out.println("6 - Return");
             Scanner in = new Scanner(System.in);
             int answer = in.nextInt();
             if (answer == 1) {
@@ -993,15 +913,6 @@ public class View {
                 System.out.println("Press enter to return");
                 in3.nextLine();
             } else if (answer == 6) {
-                Scanner input = new Scanner(System.in);
-                System.out.println("Depot from where to move: ");
-                String oldDepotName = input.nextLine();
-                System.out.println("Depot where to move to: ");
-                String newDepotName = input.nextLine();
-                System.out.println("VIN of vehicle to be moved: ");
-                String vin = input.nextLine();
-                this.controller.moveVehicle(oldDepotName, newDepotName, vin);
-            } else if (answer == 7) {
                 break;
             }
         }
@@ -1018,7 +929,8 @@ public class View {
             System.out.println("6 - Return");
             Scanner in = new Scanner(System.in);
             int answer = in.nextInt();
-            if (answer == 1) {
+            if (answer == 1)
+            {
                 System.out.println("Name: ");
                 Scanner input = new Scanner(System.in);
                 String name = input.nextLine();
@@ -1057,11 +969,12 @@ public class View {
                 System.out.println("Press enter to return");
                 Scanner temp = new Scanner(System.in);
                 temp.nextLine();
+
             } else if (answer == 5) {
                 Scanner input = new Scanner(System.in);
                 System.out.println("What station should be edited?");
                 System.out.print("Station ID: ");
-                int sid = input.nextInt();
+                int sid = Integer.parseInt(input.nextLine());
                 Station oldStation = this.controller.findStation(sid);
                 if(oldStation == null){
                     throw new StationNotFoundException("Station is missing from the repository! Please make sure to add the station before editing it!");
@@ -1225,6 +1138,48 @@ public class View {
         }
     }
 
+    private void dispatcherDepots() {
+        while(true){
+            System.out.println("\n\n\n\n\n\nPublic Transport Management Software v0.2");
+            System.out.println("1 - Find depot");
+            System.out.println("2 - Sort depots by name");
+            System.out.println("3 - Move vehicle");
+            System.out.println("4 - Return");
+            Scanner in = new Scanner(System.in);
+            int answer = in.nextInt();
+            if(answer == 1){
+                System.out.println("Depot name: ");
+                Scanner input = new Scanner(System.in);
+                String name = input.nextLine();
+                System.out.println(this.controller.findDepot(name));
+            } else if (answer == 2) {
+                Scanner input = new Scanner(System.in);
+                System.out.println("Ascending? (y/n)");
+                String ans = input.nextLine();
+                if (ans.equals("y")){
+                    List<Depot> temp = this.controller.sortDepots(true);
+                    for(Depot depot:temp){
+                        System.out.println(depot);
+                    }
+                } else if (ans.equals("n")){
+                    List<Depot> temp = this.controller.sortDepots(false);
+                    for(Depot depot:temp){
+                        System.out.println(depot);
+                    }
+                }
+            }  else if (answer == 3) {
+                Scanner input = new Scanner(System.in);
+                System.out.println("Depot where to move to: ");
+                String newDepotName = input.nextLine();
+                System.out.println("VIN of vehicle to be moved: ");
+                String vin = input.nextLine();
+                this.controller.moveVehicle(this.controller.findVehicle(vin).getDepot().getName(), newDepotName, vin);
+            } else if (answer == 4) {
+                break;
+            }
+        }
+    }
+
     public void mainMenu() throws VerkehrsbetriebException {
         setUpHibernate();
         while(true){
@@ -1261,7 +1216,8 @@ public class View {
                 } else if (answer == 4) {
                     this.loggedInUserType = null;
                 }
-            } else if (this.loggedInUserType == UserType.DIRECTOR) {
+            } else if (this.loggedInUserType == UserType.DIRECTOR)
+            {
                 System.out.println("\n\n\n\n\n\nPublic Transport Management Software v0.2");
                 System.out.println("Logged in as " + this.username);
                 System.out.println("1 - Manage vehicles");
@@ -1277,8 +1233,10 @@ public class View {
                     directorDepots();
                 } else if (answer == 3) {
                     directorLines();
-                } else if (answer == 4) {
+                }
+                else if (answer == 4) {
                     directorEmployees();
+
                 } else if (answer == 5) {
                     this.loggedInUserType = null;
                 }
@@ -1289,7 +1247,8 @@ public class View {
                 System.out.println("2 - Manage lines");
                 System.out.println("3 - Manage stations");
                 System.out.println("4 - Manage programs");
-                System.out.println("5 - Log out");
+                System.out.println("5 - Manage depots");
+                System.out.println("6 - Log out");
                 Scanner in = new Scanner(System.in);
                 int answer = in.nextInt();
                 if (answer == 1) {
@@ -1301,6 +1260,8 @@ public class View {
                 } else if (answer == 4) {
                     dispatcherPrograms();
                 } else if (answer == 5) {
+                    dispatcherDepots();
+                } else if (answer == 6) {
                     this.loggedInUserType = null;
                 }
             } else if (this.loggedInUserType == UserType.MAINTENANCE) {

@@ -12,7 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class EmployeeRepository implements repository.interfaces.EmployeeRepository {
+public class EmployeeRepository implements repository.interfaces.EmployeeRepository
+{
 
     List<Employee> employeeList;
     EntityManagerFactory factory = Persistence.createEntityManagerFactory("default");
@@ -55,7 +56,8 @@ public class EmployeeRepository implements repository.interfaces.EmployeeReposit
     }
 
     @Override
-    public Employee remove(String s) {
+    public Employee remove(String s)
+    {
         manager.getTransaction().begin();
         Employee temp = this.find(s);
         if(temp != null){
@@ -70,9 +72,8 @@ public class EmployeeRepository implements repository.interfaces.EmployeeReposit
     public void update(Employee newEntity, String s)
     {
         manager.getTransaction().begin();
-        Employee employee = new Employee();
-        employee.setEmployeeID(newEntity.getEmployeeID());
-        manager.find(Employee.class, employee.getEmployeeID());
+        Employee employee = this.find(s);
+        employee = manager.find(Employee.class, employee.getEmployeeID());
         employee.setCnp(newEntity.getCnp());
         employee.setFullname(newEntity.getFullname());
         employee.setVehicle(newEntity.getVehicle());

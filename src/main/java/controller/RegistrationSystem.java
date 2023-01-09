@@ -355,7 +355,9 @@ public class RegistrationSystem
      */
     public boolean addVehicle(Vehicle vehicle)
     {
-        return this.vehicleRepository.add(vehicle);
+        boolean val = this.vehicleRepository.add(vehicle);
+        this.depotRepository.refresh();
+        return val;
     }
 
     /**

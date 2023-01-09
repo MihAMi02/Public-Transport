@@ -21,7 +21,8 @@ public class Depot
     private String address;
 
 
-    @OneToMany(cascade = CascadeType.MERGE)
+    @ManyToMany(cascade = CascadeType.MERGE)
+    @JoinTable(name = "Depot_Vehicle", joinColumns = @JoinColumn(name = "name", nullable = true), inverseJoinColumns = @JoinColumn(name = "vin", nullable = true))
     private List<Vehicle> vehicles;
 
 

@@ -138,19 +138,19 @@ class RegistrationSystemTest
     }
 
     @org.junit.jupiter.api.Test
-    void addEmployee() throws IncorrectCNPException {
-        Employee employee=new Employee(1,"712817981098","Andrei Creci","Chef","Depotplace",2000);
+    void addEmployee() throws EmployeeException {
+        Employee employee=new Employee(1,"1851213514214","Andrei Creci","Chef","Depotplace",2000);
 
         registrationSystem.addEmployee(employee);
 
         assertEquals(registrationSystem.findEmployee(employee.getCnp()), employee);
-        assertNotNull(registrationSystem.findEmployee("5060809123456"));
-        assertNotNull(registrationSystem.findEmployee("5060809123455"));
+        assertNotNull(registrationSystem.findEmployee("1851212210544"));
+        assertNotNull(registrationSystem.findEmployee("1851212210544"));
     }
 
     @org.junit.jupiter.api.Test
-    void removeEmployee() throws IncorrectCNPException {
-        Employee employee2 = new Employee(2, "5060809123455", "Dabu Oprica Geani", "Director", "Floreasca", 5000);
+    void removeEmployee() throws EmployeeException {
+        Employee employee2 = new Employee(2, "1851212210544", "Dabu Oprica Geani", "Director", "Floreasca", 5000);
         Employee result=registrationSystem.removeEmployee(employee2.getCnp());
 
         assertEquals(employee2.getCnp(),result.getCnp());
@@ -159,22 +159,22 @@ class RegistrationSystemTest
     }
 
     @org.junit.jupiter.api.Test
-    void updateEmployee() throws IncorrectCNPException {
+    void updateEmployee() throws EmployeeException {
 
-        Employee employee=new Employee(1,"712817981098","Andrei Creci","Chef","Depotplace",2000);
-        registrationSystem.updateEmployee(employee,"5060809123455");
+        Employee employee=new Employee(1,"1851213514214","Andrei Creci","Chef","Depotplace",2000);
+        registrationSystem.updateEmployee(employee,"1851212210544");
 
-        assertNotNull(registrationSystem.findEmployee("712817981098"));
+        assertNotNull(registrationSystem.findEmployee("1851213514214"));
 
 
 
     }
 
     @org.junit.jupiter.api.Test
-    void findEmployee() throws IncorrectCNPException {
-        Employee employee2 = new Employee(2, "5060809123455", "Dabu Oprica Geani", "Director", "Floreasca", 5000);
+    void findEmployee() throws EmployeeException {
+        Employee employee2 = new Employee(2, "1851212210544", "Dabu Oprica Geani", "Director", "Floreasca", 5000);
 
-        Employee result=registrationSystem.findEmployee("5060809123455");
+        Employee result=registrationSystem.findEmployee("1851212210544");
 
         assertEquals(result.getCnp(),employee2.getCnp());
 
@@ -450,5 +450,6 @@ class RegistrationSystemTest
         Customer user1 = new Customer("ionel12", "parola");
         registrationSystem.login(user1.getUsername(), user1.getPassword());
     }
+
 }
 

@@ -14,4 +14,6 @@ public interface DepotRepository extends CrudRepository<String, Depot> {
     void addVehicleToDepot(Depot depot, Vehicle vehicle);
 
     void delVehicleToDepot(Depot depot, Vehicle vehicle);
+
+    void refresh();
 }

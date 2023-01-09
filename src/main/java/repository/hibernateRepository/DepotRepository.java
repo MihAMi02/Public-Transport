@@ -1,10 +1,7 @@
 package repository.hibernateRepository;
 
 import model.comparators.DepotNameComparator;
-import model.data.Depot;
-import model.data.DieselVehicle;
-import model.data.ElectricVehicle;
-import model.data.Vehicle;
+import model.data.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -21,15 +18,12 @@ public class DepotRepository implements repository.interfaces.DepotRepository
     EntityManagerFactory factory ;
     EntityManager manager ;
 
-
     private void fetch()
     {
         factory = Persistence.createEntityManagerFactory("default");
         manager = factory.createEntityManager();
         depotList = manager.createQuery("SELECT depot FROM Depot depot").getResultList();
-
     }
-
 
     public DepotRepository()
     {
@@ -51,6 +45,7 @@ public class DepotRepository implements repository.interfaces.DepotRepository
         if(!found) {
             this.depotList.add(entity);
             manager.persist(entity);
+            manager.getTransaction().commit();
             return true;
         }
         manager.getTransaction().commit();
@@ -75,9 +70,7 @@ public class DepotRepository implements repository.interfaces.DepotRepository
     public void update(Depot newEntity, String s)
     {
        manager.getTransaction().begin();
-       Depot depot = new Depot();
-       depot.setName(newEntity.getName());
-       manager.find(Depot.class,newEntity.getName());
+       Depot depot = manager.find(Depot.class,s);
        depot.setEmployee(newEntity.getEmployee());
        depot.setAddress(newEntity.getAddress());
        depot.setVehicles(newEntity.getVehicles());
@@ -116,20 +109,28 @@ public class DepotRepository implements repository.interfaces.DepotRepository
     public void moveVehicle(String fromDepot, String toDepot, String vin)
     {
         this.delVehicleToDepot(manager.find(Depot.class, fromDepot),manager.find(Vehicle.class, vin));
+        manager.getTransaction().begin();
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        manager.getTransaction().commit();
         this.addVehicleToDepot(manager.find(Depot.class, toDepot),manager.find(Vehicle.class, vin));
 
         manager.getTransaction().begin();
         Vehicle temp = manager.find(Vehicle.class, vin);
-        temp.setDepot(this.find(toDepot));
         manager.getTransaction().commit();
     }
 
     @Override
-    public void addVehicleToDepot(Depot depot, Vehicle vehicle){
+    public void addVehicleToDepot(Depot depot, Vehicle vehicle)
+    {
         manager.getTransaction().begin();
         manager.find(Depot.class, depot.getName());
         manager.find(Vehicle.class, vehicle.getVin());
         depot.addVehicle(vehicle);
+        vehicle.addDepot(depot);
         manager.getTransaction().commit();
     }
 
@@ -140,6 +141,18 @@ public class DepotRepository implements repository.interfaces.DepotRepository
         manager.find(Vehicle.class, vehicle.getVin());
         depot.removeVehicle(vehicle.getVin());
         manager.getTransaction().commit();
+
+        manager.getTransaction().begin();
+        Depot temp = this.find(depot.getName());
+        manager.find(Depot.class, temp.getName());
+        manager.find(Vehicle.class, vehicle.getVin());
+        temp.removeVehicle(vehicle.getVin());
+        vehicle.removeDepot(temp);
+        manager.getTransaction().commit();
     }
 
+    @Override
+    public void refresh(){
+        depotList = manager.createQuery("SELECT depot FROM Depot depot").getResultList();
+    }
 }

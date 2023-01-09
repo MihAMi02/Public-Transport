@@ -23,10 +23,9 @@ public abstract class Vehicle
     private int built;
     private int capacity;
 
-    @Getter
-    @Setter
-    @ManyToOne(cascade = CascadeType.MERGE)
-    private Depot depot;
+
+    @ManyToMany(mappedBy = "vehicles")
+    private List<Depot> depot;
 
 
     @Getter
@@ -49,7 +48,8 @@ public abstract class Vehicle
         this.capacity = capacity;
         this.driverID = null;
         this.inMaintenance = false;
-        this.depot = depot;
+        this.depot = new ArrayList<>();
+        this.depot.add(depot);
     }
 
     public Vehicle() {
@@ -112,5 +112,20 @@ public abstract class Vehicle
         this.inMaintenance = inMaintenance;
     }
 
+    public void addDepot(Depot depot){
+        this.depot.add(depot);
+    }
 
+    public void removeDepot(Depot depot){
+        this.depot.remove(depot);
+    }
+
+    public void setDepot(Depot depot){
+        this.depot.clear();
+        this.depot.add(depot);
+    }
+
+    public Depot getDepot(){
+        return this.depot.get(0);
+    }
 }

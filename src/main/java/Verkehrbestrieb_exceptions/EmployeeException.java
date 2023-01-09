@@ -4,4 +4,5 @@ public class EmployeeException extends VerkehrsbetriebException{
     public EmployeeException(String errorMessage){
         super(errorMessage);
     }
+
 }

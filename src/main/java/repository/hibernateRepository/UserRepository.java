@@ -66,9 +66,7 @@ public class UserRepository implements repository.interfaces.UserRepository
     public void update(Customer newEntity, String s)
     {
         manager.getTransaction().begin();
-        Customer customer = new Customer();
-        customer.setUserID(newEntity.getUserID());
-        manager.find(Customer.class, customer.getUserID());
+        Customer customer =  manager.find(Customer.class, this.find(s).getUserID());
         customer.setUserType(newEntity.getUserType());
         customer.setUsername(newEntity.getUsername());
         customer.setPassword(newEntity.getPassword());

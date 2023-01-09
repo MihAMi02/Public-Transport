@@ -64,14 +64,12 @@ public class TicketingSalePointRepository implements repository.interfaces.Ticke
     public void update(TicketingSalePoint newEntity, String s)
     {
         manager.getTransaction().begin();
-        TicketingSalePoint ticketingSalePoint=new TicketingSalePoint();
-        ticketingSalePoint.setId(newEntity.getId());
-        manager.find(TicketingSalePointRepository.class,ticketingSalePoint.getId());
+        TicketingSalePoint ticketingSalePoint = manager.find(TicketingSalePoint.class,s);
         ticketingSalePoint.setSoldTickets(newEntity.getSoldTickets());
         ticketingSalePoint.setType(newEntity.getType());
+        manager.getTransaction().commit();
         ticketingSalePoints = manager.createQuery("SELECT ticketing FROM TicketingSalePoint ticketing").getResultList();
 
-        manager.getTransaction().commit();
     }
 
     @Override

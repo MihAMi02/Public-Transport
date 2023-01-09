@@ -6,6 +6,7 @@
 
 
 
+
   <persistence-unit name="default">
 
     <class>model.data.Depot</class>
